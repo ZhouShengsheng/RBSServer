@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="ncu.zss.rbs.dao.RoomBookingMapper" >
+  <resultMap id="BaseResultMap" type="ncu.zss.rbs.model.RoomBooking" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="groupId" property="groupid" jdbcType="CHAR" />
+    <result column="roomBuilding" property="roombuilding" jdbcType="VARCHAR" />
+    <result column="roomNumber" property="roomnumber" jdbcType="VARCHAR" />
+    <result column="applicantType" property="applicanttype" jdbcType="VARCHAR" />
+    <result column="applicantId" property="applicantid" jdbcType="VARCHAR" />
+    <result column="fromTime" property="fromtime" jdbcType="TIMESTAMP" />
+    <result column="toTime" property="totime" jdbcType="TIMESTAMP" />
+    <result column="bookReason" property="bookreason" jdbcType="VARCHAR" />
+    <result column="progress" property="progress" jdbcType="SMALLINT" />
+    <result column="adminId" property="adminid" jdbcType="VARCHAR" />
+    <result column="facultyId" property="facultyid" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, groupId, roomBuilding, roomNumber, applicantType, applicantId, fromTime, toTime, 
+    bookReason, progress, adminId, facultyId
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from RoomBooking
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from RoomBooking
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="ncu.zss.rbs.model.RoomBooking" >
+    insert into RoomBooking (id, groupId, roomBuilding, 
+      roomNumber, applicantType, applicantId, 
+      fromTime, toTime, bookReason, 
+      progress, adminId, facultyId
+      )
+    values (#{id,jdbcType=INTEGER}, #{groupid,jdbcType=CHAR}, #{roombuilding,jdbcType=VARCHAR}, 
+      #{roomnumber,jdbcType=VARCHAR}, #{applicanttype,jdbcType=VARCHAR}, #{applicantid,jdbcType=VARCHAR}, 
+      #{fromtime,jdbcType=TIMESTAMP}, #{totime,jdbcType=TIMESTAMP}, #{bookreason,jdbcType=VARCHAR}, 
+      #{progress,jdbcType=SMALLINT}, #{adminid,jdbcType=VARCHAR}, #{facultyid,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="ncu.zss.rbs.model.RoomBooking" >
+    insert into RoomBooking
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="groupid != null" >
+        groupId,
+      </if>
+      <if test="roombuilding != null" >
+        roomBuilding,
+      </if>
+      <if test="roomnumber != null" >
+        roomNumber,
+      </if>
+      <if test="applicanttype != null" >
+        applicantType,
+      </if>
+      <if test="applicantid != null" >
+        applicantId,
+      </if>
+      <if test="fromtime != null" >
+        fromTime,
+      </if>
+      <if test="totime != null" >
+        toTime,
+      </if>
+      <if test="bookreason != null" >
+        bookReason,
+      </if>
+      <if test="progress != null" >
+        progress,
+      </if>
+      <if test="adminid != null" >
+        adminId,
+      </if>
+      <if test="facultyid != null" >
+        facultyId,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="groupid != null" >
+        #{groupid,jdbcType=CHAR},
+      </if>
+      <if test="roombuilding != null" >
+        #{roombuilding,jdbcType=VARCHAR},
+      </if>
+      <if test="roomnumber != null" >
+        #{roomnumber,jdbcType=VARCHAR},
+      </if>
+      <if test="applicanttype != null" >
+        #{applicanttype,jdbcType=VARCHAR},
+      </if>
+      <if test="applicantid != null" >
+        #{applicantid,jdbcType=VARCHAR},
+      </if>
+      <if test="fromtime != null" >
+        #{fromtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="totime != null" >
+        #{totime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bookreason != null" >
+        #{bookreason,jdbcType=VARCHAR},
+      </if>
+      <if test="progress != null" >
+        #{progress,jdbcType=SMALLINT},
+      </if>
+      <if test="adminid != null" >
+        #{adminid,jdbcType=VARCHAR},
+      </if>
+      <if test="facultyid != null" >
+        #{facultyid,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="ncu.zss.rbs.model.RoomBooking" >
+    update RoomBooking
+    <set >
+      <if test="groupid != null" >
+        groupId = #{groupid,jdbcType=CHAR},
+      </if>
+      <if test="roombuilding != null" >
+        roomBuilding = #{roombuilding,jdbcType=VARCHAR},
+      </if>
+      <if test="roomnumber != null" >
+        roomNumber = #{roomnumber,jdbcType=VARCHAR},
+      </if>
+      <if test="applicanttype != null" >
+        applicantType = #{applicanttype,jdbcType=VARCHAR},
+      </if>
+      <if test="applicantid != null" >
+        applicantId = #{applicantid,jdbcType=VARCHAR},
+      </if>
+      <if test="fromtime != null" >
+        fromTime = #{fromtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="totime != null" >
+        toTime = #{totime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bookreason != null" >
+        bookReason = #{bookreason,jdbcType=VARCHAR},
+      </if>
+      <if test="progress != null" >
+        progress = #{progress,jdbcType=SMALLINT},
+      </if>
+      <if test="adminid != null" >
+        adminId = #{adminid,jdbcType=VARCHAR},
+      </if>
+      <if test="facultyid != null" >
+        facultyId = #{facultyid,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="ncu.zss.rbs.model.RoomBooking" >
+    update RoomBooking
+    set groupId = #{groupid,jdbcType=CHAR},
+      roomBuilding = #{roombuilding,jdbcType=VARCHAR},
+      roomNumber = #{roomnumber,jdbcType=VARCHAR},
+      applicantType = #{applicanttype,jdbcType=VARCHAR},
+      applicantId = #{applicantid,jdbcType=VARCHAR},
+      fromTime = #{fromtime,jdbcType=TIMESTAMP},
+      toTime = #{totime,jdbcType=TIMESTAMP},
+      bookReason = #{bookreason,jdbcType=VARCHAR},
+      progress = #{progress,jdbcType=SMALLINT},
+      adminId = #{adminid,jdbcType=VARCHAR},
+      facultyId = #{facultyid,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

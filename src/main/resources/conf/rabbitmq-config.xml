@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+	xsi:schemaLocation="http://www.springframework.org/schema/rabbit
+           http://www.springframework.org/schema/rabbit/spring-rabbit.xsd
+           http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- connection parameters -->
+	<rabbit:connection-factory id="connectionFactory"
+		host="47.88.191.80" virtual-host="ijugo_vhost" username="ijugo_admin"
+		password="ijugo_rabbitmq" port="5672" cache-mode="CHANNEL"
+		channel-cache-size="512" connection-timeout="5000" />
+
+	<!-- template -->
+	<rabbit:template id="amqpTemplate" connection-factory="connectionFactory" />
+
+	<!-- default rabbit admin -->
+	<rabbit:admin connection-factory="connectionFactory" />
+
+	<!-- queues -->
+	<rabbit:queue name="push_notification_queue" />
+	<rabbit:queue name="email_queue" />
+	
+	<!-- exchanges -->
+	<rabbit:topic-exchange name="push_notification_exchange">
+		<rabbit:bindings>
+			<rabbit:binding queue="push_notification_queue" pattern="push.#"/>
+		</rabbit:bindings>
+	</rabbit:topic-exchange>
+	
+	<!-- exchanges -->
+	<rabbit:direct-exchange name="email_exchange">
+		<rabbit:bindings>
+			<rabbit:binding queue="email_queue" key="email_routing"/>
+		</rabbit:bindings>
+	</rabbit:direct-exchange>
+
+	<!-- listeners -->
+	<!-- <rabbit:listener-container
+		connection-factory="connectionFactory">
+		<rabbit:listener ref="mqlistener" method="listen"
+			queue-names="push_notification_queue" />
+	</rabbit:listener-container>
+
+	<bean id="mqlistener" class="test.MQListener" /> -->
+
+</beans>

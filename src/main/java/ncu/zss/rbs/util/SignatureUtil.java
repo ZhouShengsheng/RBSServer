@@ -3,7 +3,7 @@ package ncu.zss.rbs.util;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-public class DigestUtil {
+public class SignatureUtil {
 
 	/**
 	 * SHA1算法实现。

@@ -4,10 +4,12 @@
 /Users/jackjones/Workspaces/eclipse/RBSServer/src/main/java/ncu/zss/rbs/model/RoomBooking.java
 /Users/jackjones/Workspaces/eclipse/RBSServer/src/main/java/ncu/zss/rbs/model/Admin.java
 /Users/jackjones/Workspaces/eclipse/RBSServer/src/main/java/ncu/zss/rbs/model/Student.java
+/Users/jackjones/Workspaces/eclipse/RBSServer/src/main/java/ncu/zss/rbs/util/SignatureUtil.java
 /Users/jackjones/Workspaces/eclipse/RBSServer/src/main/java/ncu/zss/rbs/dao/StudentFacultyMappingMapper.java
 /Users/jackjones/Workspaces/eclipse/RBSServer/src/main/java/ncu/zss/rbs/mq/rabbitmq/RabbitMQContextUtil.java
 /Users/jackjones/Workspaces/eclipse/RBSServer/src/main/java/ncu/zss/rbs/util/PropertiesManager.java
 /Users/jackjones/Workspaces/eclipse/RBSServer/src/main/java/ncu/zss/rbs/db/manager/DataSourceAspect.java
+/Users/jackjones/Workspaces/eclipse/RBSServer/src/main/java/ncu/zss/rbs/filter/SignatureFilter.java
 /Users/jackjones/Workspaces/eclipse/RBSServer/src/main/java/ncu/zss/rbs/model/Room.java
 /Users/jackjones/Workspaces/eclipse/RBSServer/src/main/java/ncu/zss/rbs/dao/StudentMapper.java
 /Users/jackjones/Workspaces/eclipse/RBSServer/src/main/java/ncu/zss/rbs/db/manager/DynamicDataSource.java
@@ -15,8 +17,8 @@
 /Users/jackjones/Workspaces/eclipse/RBSServer/src/main/java/ncu/zss/rbs/dao/FavoriteRoomMapper.java
 /Users/jackjones/Workspaces/eclipse/RBSServer/src/main/java/ncu/zss/rbs/dao/ClassMapper.java
 /Users/jackjones/Workspaces/eclipse/RBSServer/src/main/java/ncu/zss/rbs/db/manager/RedisManager.java
-/Users/jackjones/Workspaces/eclipse/RBSServer/src/main/java/ncu/zss/rbs/util/DigestUtil.java
 /Users/jackjones/Workspaces/eclipse/RBSServer/src/main/java/ncu/zss/rbs/util/JsonUtil.java
+/Users/jackjones/Workspaces/eclipse/RBSServer/src/main/java/ncu/zss/rbs/controller/UserController.java
 /Users/jackjones/Workspaces/eclipse/RBSServer/src/main/java/ncu/zss/rbs/dao/AdminMapper.java
 /Users/jackjones/Workspaces/eclipse/RBSServer/src/main/java/ncu/zss/rbs/db/manager/DataSource.java
 /Users/jackjones/Workspaces/eclipse/RBSServer/src/main/java/ncu/zss/rbs/model/FavoriteRoom.java

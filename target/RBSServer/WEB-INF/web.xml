@@ -52,13 +52,13 @@
 	
 	
 	<!-- rights filter -->
-	<!-- <filter>
-		<filter-name>securityFilter</filter-name>
-		<filter-class>cn.com.aijugou.filter.SecurityFilter</filter-class>
+	<filter>
+		<filter-name>signatureFilter</filter-name>
+		<filter-class>ncu.zss.rbs.filter.SignatureFilter</filter-class>
 	</filter>
 	<filter-mapping>
-		<filter-name>securityFilter</filter-name>
+		<filter-name>signatureFilter</filter-name>
 		<url-pattern>/*</url-pattern>
-	</filter-mapping> -->
+	</filter-mapping>
 	
 </web-app>

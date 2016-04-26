@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="ncu.zss.rbs.dao.ClassMapper" >
+  <resultMap id="BaseResultMap" type="ncu.zss.rbs.model.Class" >
+    <id column="name" property="name" jdbcType="VARCHAR" />
+    <result column="facultyId" property="facultyid" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    name, facultyId
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from Class
+    where name = #{name,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from Class
+    where name = #{name,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="ncu.zss.rbs.model.Class" >
+    insert into Class (name, facultyId)
+    values (#{name,jdbcType=VARCHAR}, #{facultyid,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="ncu.zss.rbs.model.Class" >
+    insert into Class
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="facultyid != null" >
+        facultyId,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="facultyid != null" >
+        #{facultyid,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="ncu.zss.rbs.model.Class" >
+    update Class
+    <set >
+      <if test="facultyid != null" >
+        facultyId = #{facultyid,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where name = #{name,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="ncu.zss.rbs.model.Class" >
+    update Class
+    set facultyId = #{facultyid,jdbcType=VARCHAR}
+    where name = #{name,jdbcType=VARCHAR}
+  </update>
+</mapper>

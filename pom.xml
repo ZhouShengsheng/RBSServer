@@ -157,10 +157,10 @@
 				<artifactId>tomcat-maven-plugin</artifactId>
 				<version>1.1</version>
 				<configuration>
-					<url>http://localhost:8080/manager/text</url>
+					<url>http://54.169.129.93:8080/manager/text</url>
 					<server>healthpad</server>
-					<username>spring</username>
-					<password>spring</password>
+					<username>rbs_admin</username>
+					<password>rbs_admin</password>
 				</configuration>
 			</plugin>
 			<!-- Generate DAO -->

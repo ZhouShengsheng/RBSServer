@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="ncu.zss.rbs.dao.FacultyMapper" >
+  <resultMap id="BaseResultMap" type="ncu.zss.rbs.model.Faculty" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="id_digest" property="idDigest" jdbcType="CHAR" />
+    <result column="password" property="password" jdbcType="CHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="designation" property="designation" jdbcType="VARCHAR" />
+    <result column="gender" property="gender" jdbcType="BIT" />
+    <result column="office" property="office" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, id_digest, password, name, designation, gender, office, phone
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from Faculty
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from Faculty
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="ncu.zss.rbs.model.Faculty" >
+    insert into Faculty (id, id_digest, password, 
+      name, designation, gender, 
+      office, phone)
+    values (#{id,jdbcType=VARCHAR}, #{idDigest,jdbcType=CHAR}, #{password,jdbcType=CHAR}, 
+      #{name,jdbcType=VARCHAR}, #{designation,jdbcType=VARCHAR}, #{gender,jdbcType=BIT}, 
+      #{office,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="ncu.zss.rbs.model.Faculty" >
+    insert into Faculty
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="idDigest != null" >
+        id_digest,
+      </if>
+      <if test="password != null" >
+        password,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="designation != null" >
+        designation,
+      </if>
+      <if test="gender != null" >
+        gender,
+      </if>
+      <if test="office != null" >
+        office,
+      </if>
+      <if test="phone != null" >
+        phone,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="idDigest != null" >
+        #{idDigest,jdbcType=CHAR},
+      </if>
+      <if test="password != null" >
+        #{password,jdbcType=CHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="designation != null" >
+        #{designation,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null" >
+        #{gender,jdbcType=BIT},
+      </if>
+      <if test="office != null" >
+        #{office,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="ncu.zss.rbs.model.Faculty" >
+    update Faculty
+    <set >
+      <if test="idDigest != null" >
+        id_digest = #{idDigest,jdbcType=CHAR},
+      </if>
+      <if test="password != null" >
+        password = #{password,jdbcType=CHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="designation != null" >
+        designation = #{designation,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null" >
+        gender = #{gender,jdbcType=BIT},
+      </if>
+      <if test="office != null" >
+        office = #{office,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="ncu.zss.rbs.model.Faculty" >
+    update Faculty
+    set id_digest = #{idDigest,jdbcType=CHAR},
+      password = #{password,jdbcType=CHAR},
+      name = #{name,jdbcType=VARCHAR},
+      designation = #{designation,jdbcType=VARCHAR},
+      gender = #{gender,jdbcType=BIT},
+      office = #{office,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

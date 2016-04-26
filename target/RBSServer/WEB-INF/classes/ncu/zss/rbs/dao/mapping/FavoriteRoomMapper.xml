@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="ncu.zss.rbs.dao.FavoriteRoomMapper" >
+  <resultMap id="BaseResultMap" type="ncu.zss.rbs.model.FavoriteRoom" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="roomBuilding" property="roombuilding" jdbcType="VARCHAR" />
+    <result column="roomNumber" property="roomnumber" jdbcType="VARCHAR" />
+    <result column="personType" property="persontype" jdbcType="VARCHAR" />
+    <result column="personId" property="personid" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, roomBuilding, roomNumber, personType, personId
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from FavoriteRoom
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from FavoriteRoom
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="ncu.zss.rbs.model.FavoriteRoom" >
+    insert into FavoriteRoom (id, roomBuilding, roomNumber, 
+      personType, personId)
+    values (#{id,jdbcType=INTEGER}, #{roombuilding,jdbcType=VARCHAR}, #{roomnumber,jdbcType=VARCHAR}, 
+      #{persontype,jdbcType=VARCHAR}, #{personid,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="ncu.zss.rbs.model.FavoriteRoom" >
+    insert into FavoriteRoom
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="roombuilding != null" >
+        roomBuilding,
+      </if>
+      <if test="roomnumber != null" >
+        roomNumber,
+      </if>
+      <if test="persontype != null" >
+        personType,
+      </if>
+      <if test="personid != null" >
+        personId,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="roombuilding != null" >
+        #{roombuilding,jdbcType=VARCHAR},
+      </if>
+      <if test="roomnumber != null" >
+        #{roomnumber,jdbcType=VARCHAR},
+      </if>
+      <if test="persontype != null" >
+        #{persontype,jdbcType=VARCHAR},
+      </if>
+      <if test="personid != null" >
+        #{personid,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="ncu.zss.rbs.model.FavoriteRoom" >
+    update FavoriteRoom
+    <set >
+      <if test="roombuilding != null" >
+        roomBuilding = #{roombuilding,jdbcType=VARCHAR},
+      </if>
+      <if test="roomnumber != null" >
+        roomNumber = #{roomnumber,jdbcType=VARCHAR},
+      </if>
+      <if test="persontype != null" >
+        personType = #{persontype,jdbcType=VARCHAR},
+      </if>
+      <if test="personid != null" >
+        personId = #{personid,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="ncu.zss.rbs.model.FavoriteRoom" >
+    update FavoriteRoom
+    set roomBuilding = #{roombuilding,jdbcType=VARCHAR},
+      roomNumber = #{roomnumber,jdbcType=VARCHAR},
+      personType = #{persontype,jdbcType=VARCHAR},
+      personId = #{personid,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

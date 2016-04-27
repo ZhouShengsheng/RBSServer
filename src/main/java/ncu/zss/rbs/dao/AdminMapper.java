@@ -1,11 +1,14 @@
 package ncu.zss.rbs.dao;
 
-import ncu.zss.rbs.model.Admin;
+import ncu.zss.rbs.model.Faculty;
 
 public interface AdminMapper {
-    int deleteByPrimaryKey(String id);
 
-    int insert(Admin record);
-
-    int insertSelective(Admin record);
+	/**
+	 * Select admin by id.
+	 * @param id Admin id.
+	 * @return Admin.
+	 */
+	Faculty selectById(String id);
+	
 }

@@ -12,7 +12,7 @@
 			<property name="suppressAllComments" value="true" />
 		</commentGenerator>
 		<!--数据库链接URL，用户名、密码 -->
-		<jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://54.169.129.93:3306/rbs"
+		<jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://52.77.229.54:3306/rbs"
 			userId="rbs_admin" password="rbs_admin">
 		</jdbcConnection>
 		<javaTypeResolver>

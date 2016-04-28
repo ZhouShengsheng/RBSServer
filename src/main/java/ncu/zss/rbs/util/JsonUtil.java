@@ -3,9 +3,7 @@ package ncu.zss.rbs.util;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Map;
 
-import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -70,11 +68,33 @@ public class JsonUtil {
 	}
 	
 	/**
-	 * Convert map to json string.
-	 * @param map Map<String, Object> instance.
-	 * @return Json string.
+	 * Generate a simple response which only contains error code and message.
+	 * 
+	 * @param message The content for the message key.
+	 * @return Json string contains error code and message.
 	 */
-	public static String mapToJsonString(Map<String, Object> map) {
-		return JSONObject.toJSONString(map);
+	public static String simpleMessageResponse(String message) {
+		return String.format("{\"message\":\"%s\"}", message);
+	}
+	
+	/**
+	 * Generate a "Parameter param_name is required." message.
+	 * 
+	 * @param parameter
+	 * @return
+	 * 
+	 * @see {@link #simpleMessageResponse(String message)}
+	 */
+	public static String parameterMissingResponse(String parameter) {
+		return simpleMessageResponse(String.format("Parameter %s is required.", parameter));
+	}
+	
+	/**
+	 * Empty array as response.
+	 * 
+	 * @return
+	 */
+	public static String emptyArrayResponse() {
+		return "[]";
 	}
 }

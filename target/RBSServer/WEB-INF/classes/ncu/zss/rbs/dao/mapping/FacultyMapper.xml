@@ -17,7 +17,8 @@
   
   <!-- Select faculty by id. -->
   <select id="selectById" parameterType="java.lang.String" resultMap="BaseResultMap">
-  	select * Faculty
+  	select *
+  		from Faculty
   		where id=#{id,jdbcType=VARCHAR};
   </select>
   

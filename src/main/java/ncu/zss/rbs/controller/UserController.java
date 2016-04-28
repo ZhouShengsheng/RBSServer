@@ -1,8 +1,5 @@
 package ncu.zss.rbs.controller;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -13,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import ncu.zss.rbs.model.Faculty;
+import ncu.zss.rbs.model.Student;
 import ncu.zss.rbs.service.UserService;
 import ncu.zss.rbs.util.JsonUtil;
 
@@ -32,43 +30,53 @@ public class UserController {
 	public String login(String type, String id, String password) {
 		
 		if (type == null) {
-			Map<String, Object> result = new HashMap<>();
-			result.put("message", "Parameter type is required.");
-			return JsonUtil.objectToJsonString(result);
+			return JsonUtil.parameterMissingResponse("type");
 		}
 		
 		if (id == null) {
-			Map<String, Object> result = new HashMap<>();
-			result.put("message", "Parameter id is required.");
-			return JsonUtil.objectToJsonString(result);
+			return JsonUtil.parameterMissingResponse("id");
 		}
 		
 		if (password == null) {
-			Map<String, Object> result = new HashMap<>();
-			result.put("message", "Parameter password is required.");
-			return JsonUtil.objectToJsonString(result);
+			return JsonUtil.parameterMissingResponse("password");
 		}
 		
 		switch (type) {
 			case "admin": {
 				Faculty admin = userService.getAdminById(id);
 				if (admin == null) {
-					Map<String, Object> result = new HashMap<>();
-					result.put("message", "Admin not found.");
-					return JsonUtil.objectToJsonString(result);
+					return JsonUtil.simpleMessageResponse("Admin not found.");
 				}
 				if (!admin.getPassword().equals(password)) {
-					Map<String, Object> result = new HashMap<>();
-					result.put("message", "Password incorrect.");
-					return JsonUtil.objectToJsonString(result);
+					return JsonUtil.simpleMessageResponse("Password incorrect.");
 				}
 				return JsonUtil.objectToJsonString(admin);
 			}
+			
+			case "faculty": {
+				Faculty faculty = userService.getFacultyById(id);
+				if (faculty == null) {
+					return JsonUtil.simpleMessageResponse("Faculty not found.");
+				}
+				if (!faculty.getPassword().equals(password)) {
+					return JsonUtil.simpleMessageResponse("Password incorrect.");
+				}
+				return JsonUtil.objectToJsonString(faculty);
+			}
+			
+			case "student": {
+				Student student = userService.getStudentById(id);
+				if (student == null) {
+					return JsonUtil.simpleMessageResponse("Student not found.");
+				}
+				if (!student.getPassword().equals(password)) {
+					return JsonUtil.simpleMessageResponse("Password incorrect.");
+				}
+				return JsonUtil.objectToJsonString(student);
+			}
 	
 			default: {
-				Map<String, Object> result = new HashMap<>();
-				result.put("message", "Unknown type.");
-				return JsonUtil.objectToJsonString(result);
+				return JsonUtil.simpleMessageResponse("Unknown type.");
 			}
 		}
 	}

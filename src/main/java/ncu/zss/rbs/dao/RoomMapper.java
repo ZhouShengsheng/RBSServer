@@ -1,18 +1,28 @@
 package ncu.zss.rbs.dao;
 
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
 import ncu.zss.rbs.model.Room;
-import ncu.zss.rbs.model.RoomKey;
 
 public interface RoomMapper {
-    int deleteByPrimaryKey(RoomKey key);
-
-    int insert(Room record);
-
-    int insertSelective(Room record);
-
-    Room selectByPrimaryKey(RoomKey key);
-
-    int updateByPrimaryKeySelective(Room record);
-
-    int updateByPrimaryKey(Room record);
+    
+	/**
+	 * Select room of building.
+	 * 
+	 * @param building
+	 * @return
+	 */
+	List<Room> selectRoomList(String building);
+	
+	/**
+	 * Select room of building from index.
+	 * 
+	 * @param building
+	 * @param fromIndex
+	 * @return
+	 */
+	List<Room> selectRoomListWithFromIndex(@Param("building") String building, @Param("fromIndex") Integer fromIndex);
+	
 }

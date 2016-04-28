@@ -1,4 +1,5 @@
 /Users/jackjones/Workspaces/eclipse/RBSServer/src/main/java/ncu/zss/rbs/util/DateUtil.java
+/Users/jackjones/Workspaces/eclipse/RBSServer/src/main/java/ncu/zss/rbs/service/RoomService.java
 /Users/jackjones/Workspaces/eclipse/RBSServer/src/main/java/ncu/zss/rbs/dao/RoomBookingMapper.java
 /Users/jackjones/Workspaces/eclipse/RBSServer/src/main/java/ncu/zss/rbs/db/manager/DynamicDataSourceHolder.java
 /Users/jackjones/Workspaces/eclipse/RBSServer/src/main/java/ncu/zss/rbs/model/RoomBooking.java
@@ -9,6 +10,7 @@
 /Users/jackjones/Workspaces/eclipse/RBSServer/src/main/java/ncu/zss/rbs/mq/rabbitmq/RabbitMQContextUtil.java
 /Users/jackjones/Workspaces/eclipse/RBSServer/src/main/java/ncu/zss/rbs/util/PropertiesManager.java
 /Users/jackjones/Workspaces/eclipse/RBSServer/src/main/java/ncu/zss/rbs/db/manager/DataSourceAspect.java
+/Users/jackjones/Workspaces/eclipse/RBSServer/src/main/java/ncu/zss/rbs/service/impl/RoomServiceImpl.java
 /Users/jackjones/Workspaces/eclipse/RBSServer/src/main/java/ncu/zss/rbs/filter/SignatureFilter.java
 /Users/jackjones/Workspaces/eclipse/RBSServer/src/main/java/ncu/zss/rbs/model/Room.java
 /Users/jackjones/Workspaces/eclipse/RBSServer/src/main/java/ncu/zss/rbs/service/UserService.java
@@ -24,9 +26,9 @@
 /Users/jackjones/Workspaces/eclipse/RBSServer/src/main/java/ncu/zss/rbs/db/manager/DataSource.java
 /Users/jackjones/Workspaces/eclipse/RBSServer/src/main/java/ncu/zss/rbs/model/FavoriteRoom.java
 /Users/jackjones/Workspaces/eclipse/RBSServer/src/main/java/ncu/zss/rbs/mq/MQService.java
-/Users/jackjones/Workspaces/eclipse/RBSServer/src/main/java/ncu/zss/rbs/controller/TestController.java
 /Users/jackjones/Workspaces/eclipse/RBSServer/src/main/java/ncu/zss/rbs/model/StudentFacultyMapping.java
 /Users/jackjones/Workspaces/eclipse/RBSServer/src/main/java/ncu/zss/rbs/mq/rabbitmq/RabbitMQMessageListener.java
+/Users/jackjones/Workspaces/eclipse/RBSServer/src/main/java/ncu/zss/rbs/controller/RoomController.java
 /Users/jackjones/Workspaces/eclipse/RBSServer/src/main/java/ncu/zss/rbs/dao/RoomMapper.java
 /Users/jackjones/Workspaces/eclipse/RBSServer/src/main/java/ncu/zss/rbs/model/Class.java
 /Users/jackjones/Workspaces/eclipse/RBSServer/src/main/java/ncu/zss/rbs/mq/rabbitmq/RabbitMQService.java

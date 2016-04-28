@@ -10,73 +10,22 @@
   <sql id="Base_Column_List" >
     building, number, capacity, hasMultiMedia
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="ncu.zss.rbs.model.RoomKey" >
-    select 
-    <include refid="Base_Column_List" />
-    from Room
-    where building = #{building,jdbcType=VARCHAR}
-      and number = #{number,jdbcType=VARCHAR}
+  
+  <!-- Select room of building. -->
+  <select id="selectRoomList" resultMap="BaseResultMap">
+  	select *
+  		from Room
+  		where building = #{building,jdbcType=VARCHAR}
+  		order by number;
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="ncu.zss.rbs.model.RoomKey" >
-    delete from Room
-    where building = #{building,jdbcType=VARCHAR}
-      and number = #{number,jdbcType=VARCHAR}
-  </delete>
-  <insert id="insert" parameterType="ncu.zss.rbs.model.Room" >
-    insert into Room (building, number, capacity, 
-      hasMultiMedia)
-    values (#{building,jdbcType=VARCHAR}, #{number,jdbcType=VARCHAR}, #{capacity,jdbcType=SMALLINT}, 
-      #{hasmultimedia,jdbcType=BIT})
-  </insert>
-  <insert id="insertSelective" parameterType="ncu.zss.rbs.model.Room" >
-    insert into Room
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="building != null" >
-        building,
-      </if>
-      <if test="number != null" >
-        number,
-      </if>
-      <if test="capacity != null" >
-        capacity,
-      </if>
-      <if test="hasmultimedia != null" >
-        hasMultiMedia,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="building != null" >
-        #{building,jdbcType=VARCHAR},
-      </if>
-      <if test="number != null" >
-        #{number,jdbcType=VARCHAR},
-      </if>
-      <if test="capacity != null" >
-        #{capacity,jdbcType=SMALLINT},
-      </if>
-      <if test="hasmultimedia != null" >
-        #{hasmultimedia,jdbcType=BIT},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="ncu.zss.rbs.model.Room" >
-    update Room
-    <set >
-      <if test="capacity != null" >
-        capacity = #{capacity,jdbcType=SMALLINT},
-      </if>
-      <if test="hasmultimedia != null" >
-        hasMultiMedia = #{hasmultimedia,jdbcType=BIT},
-      </if>
-    </set>
-    where building = #{building,jdbcType=VARCHAR}
-      and number = #{number,jdbcType=VARCHAR}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="ncu.zss.rbs.model.Room" >
-    update Room
-    set capacity = #{capacity,jdbcType=SMALLINT},
-      hasMultiMedia = #{hasmultimedia,jdbcType=BIT}
-    where building = #{building,jdbcType=VARCHAR}
-      and number = #{number,jdbcType=VARCHAR}
-  </update>
+  
+  <!-- Select room of building from index. -->
+  <select id="selectRoomListWithFromIndex" resultMap="BaseResultMap">
+  	select *
+  		from Room
+  		where building = #{building,jdbcType=VARCHAR}
+  		order by number
+  		limit #{fromIndex,jdbcType=INTEGER}, 20;
+  </select>
+  
 </mapper>

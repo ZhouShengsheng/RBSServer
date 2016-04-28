@@ -8,7 +8,6 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
 /**
@@ -23,8 +22,8 @@ public class JsonUtil {
 	static {
 		mapper = new ObjectMapper();
 		// set the name format to lower_case_with_underscores (eg. show_name, product_category_index)
-		mapper.setPropertyNamingStrategy(
-			    PropertyNamingStrategy.CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES);
+//		mapper.setPropertyNamingStrategy(
+//			    PropertyNamingStrategy.CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES);
 		// convert date as string format
 		mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
 	}

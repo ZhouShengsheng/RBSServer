@@ -32,18 +32,14 @@ public class SignatureFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
-		
-		String idDigest = request.getParameter("idDigest");
-		String nonceStr = request.getParameter("nonceStr");
-		String timestamp = request.getParameter("timestamp");
-		String signature = request.getParameter("signature");
-		
-		logger.info("idDigest: " + idDigest);
-		logger.info("nonceStr: " + nonceStr);
-		logger.info("timestamp: " + timestamp);
-		logger.info("signature: " + signature);
+		// Check if it's special uri.
+		if (isSpecialURI(request)) {
+			filterChain.doFilter(request, response);
+			return ;
+		}
 		
 		// Check request timestamp.
+		String timestamp = request.getParameter("timestamp");
 		long timeDiff = new Date().getTime()/1000 - Integer.parseInt(timestamp);
 		if (timeDiff >= requestTimeout || timeDiff < 0) {
 			logger.warn("Request timeout.");
@@ -55,7 +51,7 @@ public class SignatureFilter extends OncePerRequestFilter {
 		}
 		
 		// Check signature.
-		if (checkSignature(request, idDigest, nonceStr, timestamp, signature)) {
+		if (checkSignature(request)) {
 			logger.info("SignatureFilter passed.");
 			filterChain.doFilter(request, response);
 		} else {
@@ -68,25 +64,39 @@ public class SignatureFilter extends OncePerRequestFilter {
 	}
 	
 	/**
+	 * Check if it's special uri.
+	 * @param request
+	 * @return
+	 */
+	private boolean isSpecialURI(HttpServletRequest request) {
+		String uri = request.getRequestURI();
+		if (uri.contains("/user/login") ||
+				uri.contains("/hostname")) {
+			return true;
+		}
+		
+		return false;
+	}
+	
+	/**
 	 * Check signature.
 	 * 
 	 * @param idDigest
 	 * @param nonceStr
 	 * @return
 	 */
-	private boolean checkSignature(HttpServletRequest request, String idDigest, String nonceStr, String timestamp, String signature) {
-		// Do not check some uris.
-		String uri = request.getRequestURI();
-		if(uri.contains("/user/login")) {
-			return true;
-		}
-		
+	private boolean checkSignature(HttpServletRequest request) {
+		String idDigest = request.getParameter("idDigest");
 		// Get user id from redis.
 		String id = RedisManager.getStringValueRedis(RedisManager.DB_USER, idDigest);
 		logger.info("id: " + id);
 		if (id == null) {
 			return false;
 		}
+		
+		String nonceStr = request.getParameter("nonceStr");
+		String timestamp = request.getParameter("timestamp");
+		String signature = request.getParameter("signature");
 		
 		// Check signature.
 		String str = String.format("id=%s&nonceStr=%s&timestamp=%s", id, nonceStr, timestamp);

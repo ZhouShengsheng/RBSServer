@@ -157,6 +157,9 @@
 				<artifactId>tomcat-maven-plugin</artifactId>
 				<version>1.1</version>
 				<configuration>
+					<!-- Servers. -->
+					<!-- www.zss-rbs.site (52.77.229.54/172.31.28.128) -->
+					<!-- 52.77.230.215/172.31.6.38 -->
 					<url>http://www.zss-rbs.site:8080/manager/text</url>
 					<server>healthpad</server>
 					<username>rbs_admin</username>

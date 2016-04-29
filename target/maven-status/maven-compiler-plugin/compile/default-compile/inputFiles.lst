@@ -5,6 +5,7 @@
 /Users/jackjones/Workspaces/eclipse/RBSServer/src/main/java/ncu/zss/rbs/model/RoomBooking.java
 /Users/jackjones/Workspaces/eclipse/RBSServer/src/main/java/ncu/zss/rbs/model/Admin.java
 /Users/jackjones/Workspaces/eclipse/RBSServer/src/main/java/ncu/zss/rbs/model/Student.java
+/Users/jackjones/Workspaces/eclipse/RBSServer/src/main/java/ncu/zss/rbs/controller/HostTestController.java
 /Users/jackjones/Workspaces/eclipse/RBSServer/src/main/java/ncu/zss/rbs/util/SignatureUtil.java
 /Users/jackjones/Workspaces/eclipse/RBSServer/src/main/java/ncu/zss/rbs/mq/rabbitmq/RabbitMQContextUtil.java
 /Users/jackjones/Workspaces/eclipse/RBSServer/src/main/java/ncu/zss/rbs/util/PropertiesManager.java

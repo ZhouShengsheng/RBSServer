@@ -28,4 +28,34 @@
   		limit #{fromIndex,jdbcType=INTEGER}, 20;
   </select>
   
+  <!-- Insert room. -->
+  <insert id="insertRoom">
+  	insert into Room (building, number, capacity, hasMultiMedia)
+  		values (#{building,jdbcType=VARCHAR}, #{number,jdbcType=VARCHAR}, #{capacity,jdbcType=INTEGER}, #{hasMultiMedia,jdbcType=SMALLINT});
+  </insert>
+  
+  <!-- Select room. -->
+  <select id="selectRoom" resultMap="BaseResultMap">
+  	select *
+  		from Room
+  		where building = #{building,jdbcType=VARCHAR}
+  			and number = #{number,jdbcType=VARCHAR};
+  </select>
+  
+  <!-- Update room. -->
+  <update id="updateRoom">
+  	update Room
+  		set capacity = #{capacity,jdbcType=INTEGER}, 
+  			hasMultiMedia = #{hasMultiMedia,jdbcType=SMALLINT}
+  		where building = #{building,jdbcType=VARCHAR}
+  			and number = #{number,jdbcType=VARCHAR};
+  </update>
+  
+  <!-- Delete room. -->
+  <delete id="deleteRoom">
+  	delete from Room
+  		where building = #{building,jdbcType=VARCHAR}
+  			and number = #{number,jdbcType=VARCHAR};
+  </delete>
+  
 </mapper>

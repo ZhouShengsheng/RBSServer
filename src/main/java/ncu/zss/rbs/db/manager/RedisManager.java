@@ -16,6 +16,13 @@ public class RedisManager {
 	// redis pool
 	private JedisPool jedisPool;
 	
+	// Redis DBs.
+	public static final int DB_ADMIN = 1;
+	public static final int DB_USER = 2;
+	
+	// Default expire time.
+	public static final int EXPIRE_TIME = 7 * 24 * 3600;
+	
 	private RedisManager() {
 		
 		this.redisHost = PropertiesManager.getInstance().getValue(redisPropertiesFile, "redis_localhost");

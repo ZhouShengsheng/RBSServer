@@ -6,9 +6,16 @@ public interface AdminMapper {
 
 	/**
 	 * Select admin by id.
-	 * @param id Admin id.
-	 * @return Admin.
+	 * @param
+	 * @return
 	 */
 	Faculty selectById(String id);
+	
+	/**
+	 * Select admin by id digest.
+	 * @param
+	 * @return
+	 */
+	Faculty selectByIdDigest(String idDigest);
 	
 }

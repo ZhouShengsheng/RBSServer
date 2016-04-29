@@ -76,4 +76,149 @@ public class RoomController {
 		
 		return JsonUtil.objectToJsonString(resultList);
 	}
+	
+	/**
+	 * Add room.
+	 * 
+	 * @param idDigest The admin's id digest.
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/add", method = RequestMethod.POST)
+	public String addRoom(String idDigest, String building, String number, Integer capacity, Integer hasMultiMedia) {
+		// Check parameters.
+		if (idDigest == null) {
+			return JsonUtil.parameterMissingResponse("idDigest");
+		}
+		if (building == null) {
+			return JsonUtil.parameterMissingResponse("building");
+		}
+		if (number == null) {
+			return JsonUtil.parameterMissingResponse("number");
+		}
+		if (capacity == null) {
+			return JsonUtil.parameterMissingResponse("capacity");
+		}
+		if (hasMultiMedia == null) {
+			return JsonUtil.parameterMissingResponse("hasMultiMedia");
+		}
+		
+		// Check is admin.
+		if (!userService.isAdmin(idDigest)) {
+			return JsonUtil.simpleMessageResponse("You do not have the privileges.");
+		}
+		
+		// Check if room exists.
+		Room room = roomService.getRoom(building, number);
+		if (room != null) {
+			return JsonUtil.simpleMessageResponse("Room exists.");
+		}
+		
+		// Add room.
+		roomService.addRoom(building, number, capacity, hasMultiMedia);
+		
+		return JsonUtil.simpleMessageResponse("Room added.");
+	}
+	
+	/**
+	 * Get room info.
+	 * 
+	 * @param idDigest The admin's id digest.
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/info", method = RequestMethod.POST)
+	public String getRoomInfo(String building, String number) {
+		// Check parameters.
+		if (building == null) {
+			return JsonUtil.parameterMissingResponse("building");
+		}
+		if (number == null) {
+			return JsonUtil.parameterMissingResponse("number");
+		}
+		
+		// Check if room exists.
+		Room room = roomService.getRoom(building, number);
+		if (room == null) {
+			return JsonUtil.simpleMessageResponse("Room not found.");
+		}
+		
+		return JsonUtil.objectToJsonString(room);
+	}
+	
+	/**
+	 * Update room info.
+	 * 
+	 * @param idDigest The admin's id digest.
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/update", method = RequestMethod.POST)
+	public String updateRoomInfo(String idDigest, String building, String number, Integer capacity, Integer hasMultiMedia) {
+		// Check parameters.
+		if (idDigest == null) {
+			return JsonUtil.parameterMissingResponse("idDigest");
+		}
+		if (building == null) {
+			return JsonUtil.parameterMissingResponse("building");
+		}
+		if (number == null) {
+			return JsonUtil.parameterMissingResponse("number");
+		}
+		if (capacity == null) {
+			return JsonUtil.parameterMissingResponse("capacity");
+		}
+		if (hasMultiMedia == null) {
+			return JsonUtil.parameterMissingResponse("hasMultiMedia");
+		}
+		
+		// Check is admin.
+		if (!userService.isAdmin(idDigest)) {
+			return JsonUtil.simpleMessageResponse("You do not have the privileges.");
+		}
+		
+		// Check if room exists.
+		Room room = roomService.getRoom(building, number);
+		if (room == null) {
+			return JsonUtil.simpleMessageResponse("Room not found.");
+		}
+
+		// Add room.
+		roomService.updateRoom(building, number, capacity, hasMultiMedia);
+
+		return JsonUtil.simpleMessageResponse("Room updated.");
+	}
+	
+	/**
+	 * Delete room.
+	 * 
+	 * @param idDigest The admin's id digest.
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/delete", method = RequestMethod.POST)
+	public String deleteRoom(String idDigest, String building, String number) {
+		// Check parameters.
+		if (idDigest == null) {
+			return JsonUtil.parameterMissingResponse("idDigest");
+		}
+		if (building == null) {
+			return JsonUtil.parameterMissingResponse("building");
+		}
+		if (number == null) {
+			return JsonUtil.parameterMissingResponse("number");
+		}
+		
+		// Check is admin.
+		if (!userService.isAdmin(idDigest)) {
+			return JsonUtil.simpleMessageResponse("You do not have the privileges.");
+		}
+		
+		// Check if room exists.
+		Room room = roomService.getRoom(building, number);
+		if (room == null) {
+			return JsonUtil.simpleMessageResponse("Room not found.");
+		}
+
+		// Add room.
+		roomService.deleteRoom(building, number);
+
+		return JsonUtil.simpleMessageResponse("Room deleted.");
+	}
 }

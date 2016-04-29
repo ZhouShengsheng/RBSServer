@@ -22,4 +22,17 @@
   		where id=#{id,jdbcType=VARCHAR};
   </select>
   
+  <!-- Update student info. -->
+  <update id="updateInfo" parameterType="ncu.zss.rbs.model.Student">
+  	update Student
+  		<set>
+  			<if test="name != null">name=#{name},</if>
+  			<if test="password != null">password=#{password},</if>
+      		<if test="gender != null">gender=#{gender},</if>
+      		<if test="dormroomnumber != null">dormRoomNumber=#{dormroomnumber},</if>
+      		<if test="phone != null">phone=#{phone}</if>
+    	</set>
+  		where id = #{id,jdbcType=VARCHAR};
+  </update>
+  
 </mapper>

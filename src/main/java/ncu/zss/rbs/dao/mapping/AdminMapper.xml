@@ -25,4 +25,14 @@
   		on A.id = F.id;
   </select>
   
+  <!-- Select admin by id digest. -->
+  <select id="selectByIdDigest" parameterType="java.lang.String" resultMap="BaseResultMap">
+  	select F.*
+  		from (select *
+  				from Faculty
+  				where idDigest=#{idDigest,jdbcType=VARCHAR}) as F
+  		join Admin as A
+  		on A.id = F.id;
+  </select>
+  
 </mapper>

@@ -58,39 +58,233 @@ public class UserController {
 			case "admin": {
 				Faculty admin = userService.getAdminById(id);
 				if (admin == null) {
-					return JsonUtil.simpleMessageResponse("Admin not found.");
+					return JsonUtil.simpleMessageResponse("User not found.");
 				}
 				if (!admin.getPassword().equals(password)) {
 					return JsonUtil.simpleMessageResponse("Password incorrect.");
 				}
-				RedisManager.storeValueInRedis(1, admin.getIdDigest(), admin.getId(), 7 * 24 * 3600);
+				RedisManager.storeValueInRedis(RedisManager.DB_USER, admin.getIdDigest(), admin.getId(), RedisManager.EXPIRE_TIME);
+				RedisManager.storeValueInRedis(RedisManager.DB_ADMIN, admin.getIdDigest(), admin.getId(), RedisManager.EXPIRE_TIME);
+				admin.setPassword(null);
 				return JsonUtil.objectToJsonString(admin);
 			}
 			
 			case "faculty": {
 				Faculty faculty = userService.getFacultyById(id);
 				if (faculty == null) {
-					return JsonUtil.simpleMessageResponse("Faculty not found.");
+					return JsonUtil.simpleMessageResponse("User not found.");
 				}
 				if (!faculty.getPassword().equals(password)) {
 					return JsonUtil.simpleMessageResponse("Password incorrect.");
 				}
-				RedisManager.storeValueInRedis(1, faculty.getIdDigest(), faculty.getId(), 7 * 24 * 3600);
+				RedisManager.storeValueInRedis(RedisManager.DB_USER, faculty.getIdDigest(), faculty.getId(), RedisManager.EXPIRE_TIME);
+				faculty.setPassword(null);
 				return JsonUtil.objectToJsonString(faculty);
 			}
 			
 			case "student": {
 				Student student = userService.getStudentById(id);
 				if (student == null) {
-					return JsonUtil.simpleMessageResponse("Student not found.");
+					return JsonUtil.simpleMessageResponse("User not found.");
 				}
 				if (!student.getPassword().equals(password)) {
 					return JsonUtil.simpleMessageResponse("Password incorrect.");
 				}
-				RedisManager.storeValueInRedis(1, student.getIdDigest(), student.getId(), 7 * 24 * 3600);
+				RedisManager.storeValueInRedis(RedisManager.DB_USER, student.getIdDigest(), student.getId(), RedisManager.EXPIRE_TIME);
+				student.setPassword(null);
 				return JsonUtil.objectToJsonString(student);
 			}
 	
+			default: {
+				return JsonUtil.simpleMessageResponse("Unknown type.");
+			}
+		}
+	}
+	
+	/**
+	 * Get user info.
+	 * 
+	 * @param type One of admin, faculty and student.
+	 * @param id
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/info", method = RequestMethod.POST)
+	public String getUserInfo(String type, String id) {
+		
+		if (type == null) {
+			return JsonUtil.parameterMissingResponse("type");
+		}
+		
+		if (id == null) {
+			return JsonUtil.parameterMissingResponse("id");
+		}
+		
+		switch (type) {
+			case "admin": {
+				Faculty admin = userService.getAdminById(id);
+				if (admin == null) {
+					return JsonUtil.simpleMessageResponse("User not found.");
+				}
+				admin.setPassword(null);
+				
+				return JsonUtil.objectToJsonString(admin);
+			}
+			
+			case "faculty": {
+				Faculty faculty = userService.getFacultyById(id);
+				if (faculty == null) {
+					return JsonUtil.simpleMessageResponse("User not found.");
+				}
+				faculty.setPassword(null);
+
+				return JsonUtil.objectToJsonString(faculty);
+			}
+			
+			case "student": {
+				Student student = userService.getStudentById(id);
+				if (student == null) {
+					return JsonUtil.simpleMessageResponse("User not found.");
+				}
+				student.setPassword(null);
+				
+				return JsonUtil.objectToJsonString(student);
+			}
+	
+			default: {
+				return JsonUtil.simpleMessageResponse("Unknown type.");
+			}
+		}
+	}
+	
+	/**
+	 * Update user info.
+	 * 
+	 * @param type One of admin, faculty and student.
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/update", method = RequestMethod.POST)
+	public String updateUserInfo(String idDigest, String type, String id,
+			String designation, Boolean gender, String office, String phone, String dormRoomNumber) {
+		// Check parameters.
+		if (type == null) {
+			return JsonUtil.parameterMissingResponse("type");
+		}
+		if (id == null) {
+			return JsonUtil.parameterMissingResponse("id");
+		}
+
+		// Check if the user performing the action is the user logged in.
+		String idLoggedIn = RedisManager.getStringValueRedis(RedisManager.DB_USER, idDigest);
+		if (idLoggedIn == null || !idLoggedIn.equals(id)) {
+			return JsonUtil.simpleMessageResponse("You do not have the privileges.");
+		}
+		
+		switch (type) {
+			case "admin":
+			case "faculty": {
+				Faculty faculty = userService.getFacultyById(id);
+				if (faculty == null) {
+					return JsonUtil.simpleMessageResponse("User not found.");
+				}
+				
+				// Update faculty info.
+				faculty.setDesignation(designation);
+				faculty.setGender(gender);
+				faculty.setOffice(office);
+				faculty.setPhone(phone);
+				userService.updateFaculty(faculty);
+
+				return JsonUtil.simpleMessageResponse("User updated.");
+			}
+			
+			case "student": {
+				Student student = userService.getStudentById(id);
+				if (student == null) {
+					return JsonUtil.simpleMessageResponse("User not found.");
+				}
+				
+				// Update student info.
+				student.setGender(gender);
+				student.setDormroomnumber(dormRoomNumber);
+				student.setPhone(phone);
+				userService.updateStudent(student);
+
+				return JsonUtil.simpleMessageResponse("User updated.");
+			}
+			
+			default: {
+				return JsonUtil.simpleMessageResponse("Unknown type.");
+			}
+		}
+	}
+	
+	/**
+	 * Change password.
+	 * 
+	 * @param type One of admin, faculty and student.
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/change_password", method = RequestMethod.POST)
+	public String changePassword(String idDigest, String type, String id, String password, String newPassword) {
+		// Check parameters.
+		if (type == null) {
+			return JsonUtil.parameterMissingResponse("type");
+		}
+		if (id == null) {
+			return JsonUtil.parameterMissingResponse("id");
+		}
+		if (password == null) {
+			return JsonUtil.parameterMissingResponse("password");
+		}
+		if (newPassword == null) {
+			return JsonUtil.parameterMissingResponse("newPassword");
+		}
+		
+		// Check if the user performing the action is the user logged in.
+		String idLoggedIn = RedisManager.getStringValueRedis(RedisManager.DB_USER, idDigest);
+		if (idLoggedIn == null || !idLoggedIn.equals(id)) {
+			return JsonUtil.simpleMessageResponse("You do not have the privileges.");
+		}
+		
+		switch (type) {
+			case "admin":
+			case "faculty": {
+				Faculty faculty = userService.getFacultyById(id);
+				if (faculty == null) {
+					return JsonUtil.simpleMessageResponse("User not found.");
+				}
+				
+				if (!faculty.getPassword().equals(password)) {
+					return JsonUtil.simpleMessageResponse("Password incorrect.");
+				}
+				
+				// Change password.
+				faculty.setPassword(newPassword);
+				userService.updateFaculty(faculty);
+				
+				return JsonUtil.simpleMessageResponse("Password changed.");
+			}
+			
+			case "student": {
+				Student student = userService.getStudentById(id);
+				if (student == null) {
+					return JsonUtil.simpleMessageResponse("User not found.");
+				}
+				
+				if (!student.getPassword().equals(password)) {
+					return JsonUtil.simpleMessageResponse("Password incorrect.");
+				}
+				
+				// Change password.
+				student.setPassword(newPassword);
+				userService.updateStudent(student);
+
+				return JsonUtil.simpleMessageResponse("Password changed.");
+			}
+			
 			default: {
 				return JsonUtil.simpleMessageResponse("Unknown type.");
 			}

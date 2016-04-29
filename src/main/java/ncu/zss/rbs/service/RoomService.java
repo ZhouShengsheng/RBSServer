@@ -24,4 +24,42 @@ public interface RoomService {
 	 */
 	List<Room> getRoomList(String building, Integer fromIndex);
 	
+	/**
+	 * Add room.
+	 * 
+	 * @param building
+	 * @param number
+	 * @param capacity
+	 * @param hasMultiMedia
+	 * @return
+	 */
+	void addRoom(String building, String number, Integer capacity, Integer hasMultiMedia);
+	
+	/**
+	 * Get room.
+	 * 
+	 * @param building
+	 * @param number
+	 * @return
+	 */
+	Room getRoom(String building, String number);
+	
+	/**
+	 * Update room.
+	 * 
+	 * @param building
+	 * @param number
+	 * @param capacity
+	 * @param hasMultiMedia
+	 */
+	void updateRoom(String building, String number, Integer capacity, Integer hasMultiMedia);
+	
+	/**
+	 * Delete room.
+	 * 
+	 * @param building
+	 * @param number
+	 */
+	void deleteRoom(String building, String number);
+	
 }

@@ -15,6 +15,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import ncu.zss.rbs.db.manager.RedisManager;
 import ncu.zss.rbs.util.JsonUtil;
 import ncu.zss.rbs.util.SignatureUtil;
+
 /**
  * Check signature of request.
  *
@@ -24,7 +25,7 @@ public class SignatureFilter extends OncePerRequestFilter {
 	/**
 	 * Request timeout.
 	 */
-	public static final long requestTimeout = 10000;
+	public static final long requestTimeout = 100000;
 
 	Logger logger = Logger.getLogger(getClass());
 	
@@ -81,7 +82,7 @@ public class SignatureFilter extends OncePerRequestFilter {
 		}
 		
 		// Get user id from redis.
-		String id = RedisManager.getStringValueRedis(1, idDigest);
+		String id = RedisManager.getStringValueRedis(RedisManager.DB_USER, idDigest);
 		logger.info("id: " + id);
 		if (id == null) {
 			return false;
@@ -89,6 +90,7 @@ public class SignatureFilter extends OncePerRequestFilter {
 		
 		// Check signature.
 		String str = String.format("id=%s&nonceStr=%s&timestamp=%s", id, nonceStr, timestamp);
+		logger.info("str: " + str);
 		String curSignature = SignatureUtil.sha1(str);
 		return curSignature.equals(signature);
 	}

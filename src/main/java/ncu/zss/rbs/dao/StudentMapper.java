@@ -12,4 +12,11 @@ public interface StudentMapper {
 	 */
 	Student selectById(String id);
 	
+	/**
+	 * Update student info.
+	 * 
+	 * @param student
+	 */
+	void updateInfo(Student student);
+	
 }

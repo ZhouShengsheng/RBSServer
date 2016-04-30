@@ -9,6 +9,15 @@ import ncu.zss.rbs.model.Student;
 public interface UserService {
 	
 	/**
+	 * Check if the user performing the action is the user logged in.
+	 * 
+	 * @param id
+	 * @param idDigest
+	 * @return
+	 */
+	boolean isSameUserLoggedIn(String id, String idDigest);
+	
+	/**
 	 * Get admin by id.
 	 * 
 	 * @param

@@ -37,7 +37,7 @@
 		</javaClientGenerator>
 	
 		<!-- Tables -->
-		<table tableName="Admin" domainObjectName="Admin"
+		<!-- <table tableName="Admin" domainObjectName="Admin"
 			enableCountByExample="false" enableUpdateByExample="false"
 			enableDeleteByExample="false" enableSelectByExample="false"
 			selectByExampleQueryId="false" />
@@ -70,9 +70,9 @@
 		<table tableName="Student" domainObjectName="Student"
 			enableCountByExample="false" enableUpdateByExample="false"
 			enableDeleteByExample="false" enableSelectByExample="false"
-			selectByExampleQueryId="false" />
+			selectByExampleQueryId="false" /> -->
 		
-		<table tableName="StudentFacultyMapping" domainObjectName="StudentFacultyMapping"
+		<table tableName="Supervisor" domainObjectName="Supervisor"
 			enableCountByExample="false" enableUpdateByExample="false"
 			enableDeleteByExample="false" enableSelectByExample="false"
 			selectByExampleQueryId="false" />

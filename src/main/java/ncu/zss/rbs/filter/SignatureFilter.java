@@ -12,9 +12,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import ncu.zss.rbs.db.manager.RedisManager;
 import ncu.zss.rbs.util.JsonUtil;
 import ncu.zss.rbs.util.SignatureUtil;
+import ncu.zss.rbs.util.UserUtil;
 
 /**
  * Check signature of request.
@@ -25,7 +25,7 @@ public class SignatureFilter extends OncePerRequestFilter {
 	/**
 	 * Request timeout.
 	 */
-	public static final long requestTimeout = 100000;
+	public static final long requestTimeout = 100000000;
 
 	Logger logger = Logger.getLogger(getClass());
 	
@@ -87,8 +87,7 @@ public class SignatureFilter extends OncePerRequestFilter {
 	 */
 	private boolean checkSignature(HttpServletRequest request) {
 		String idDigest = request.getParameter("idDigest");
-		// Get user id from redis.
-		String id = RedisManager.getStringValueRedis(RedisManager.DB_USER, idDigest);
+		String id = UserUtil.getUserIdByIdDigest(idDigest);
 		logger.info("id: " + id);
 		if (id == null) {
 			return false;

@@ -10,6 +10,7 @@ import ncu.zss.rbs.db.manager.RedisManager;
 import ncu.zss.rbs.model.Faculty;
 import ncu.zss.rbs.model.Student;
 import ncu.zss.rbs.service.UserService;
+import ncu.zss.rbs.util.UserUtil;
 
 @Service("userServiceImpl")
 public class UserServiceImpl implements UserService {
@@ -22,6 +23,12 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	StudentMapper studentMapper;
+	
+	@Override
+	public boolean isSameUserLoggedIn(String id, String idDigest) {
+		String idLoggedIn = UserUtil.getUserIdByIdDigest(idDigest);
+		return (idLoggedIn != null && idLoggedIn.equals(id));
+	}
 
 	@Override
 	public Faculty getAdminById(String id) {

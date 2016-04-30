@@ -41,7 +41,6 @@ public class UserController {
 	@ResponseBody
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public String login(String type, String id, String password) {
-		
 		if (type == null) {
 			return JsonUtil.parameterMissingResponse("type");
 		}
@@ -111,7 +110,6 @@ public class UserController {
 	@ResponseBody
 	@RequestMapping(value = "/info", method = RequestMethod.POST)
 	public String getUserInfo(String type, String id) {
-		
 		if (type == null) {
 			return JsonUtil.parameterMissingResponse("type");
 		}
@@ -176,8 +174,7 @@ public class UserController {
 		}
 
 		// Check if the user performing the action is the user logged in.
-		String idLoggedIn = RedisManager.getStringValueRedis(RedisManager.DB_USER, idDigest);
-		if (idLoggedIn == null || !idLoggedIn.equals(id)) {
+		if (!userService.isSameUserLoggedIn(id, idDigest)) {
 			return JsonUtil.simpleMessageResponse("You do not have the privileges.");
 		}
 		
@@ -242,10 +239,9 @@ public class UserController {
 		if (newPassword == null) {
 			return JsonUtil.parameterMissingResponse("newPassword");
 		}
-		
+
 		// Check if the user performing the action is the user logged in.
-		String idLoggedIn = RedisManager.getStringValueRedis(RedisManager.DB_USER, idDigest);
-		if (idLoggedIn == null || !idLoggedIn.equals(id)) {
+		if (!userService.isSameUserLoggedIn(id, idDigest)) {
 			return JsonUtil.simpleMessageResponse("You do not have the privileges.");
 		}
 		

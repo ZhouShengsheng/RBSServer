@@ -3,7 +3,7 @@
 <mapper namespace="ncu.zss.rbs.dao.StudentMapper" >
   <resultMap id="BaseResultMap" type="ncu.zss.rbs.model.Student" >
     <id column="id" property="id" jdbcType="VARCHAR" />
-    <result column="id_digest" property="idDigest" jdbcType="CHAR" />
+    <result column="idDigest" property="idDigest" jdbcType="CHAR" />
     <result column="password" property="password" jdbcType="CHAR" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="className" property="classname" jdbcType="VARCHAR" />

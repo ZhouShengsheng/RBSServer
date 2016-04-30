@@ -33,3 +33,25 @@ select @@lower_case_table_names;
 
 desc Faculty;
 desc Student;
+
+select * from FavoriteRoom;
+
+select * from Supervisor;
+
+insert into StudentFacultyMapping(studentId, facultyId)
+	values('8000112164', '10002');
+    
+rename table StudentFacultyMapping to Supervisor;
+
+select * from Class;
+update Class set facultyId = '10003';
+
+select F.*
+	from Faculty as F
+    join (select C.facultyId
+			from Class as C
+			join (select className
+					from Student
+					where id = '8000112164') as SC
+			on C.`name` = SC.className) as FC
+	on F.id = FC.facultyId;

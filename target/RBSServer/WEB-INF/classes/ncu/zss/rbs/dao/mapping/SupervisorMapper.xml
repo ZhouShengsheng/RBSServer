@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="ncu.zss.rbs.dao.SupervisorMapper" >
+  <resultMap id="BaseResultMap" type="ncu.zss.rbs.model.Supervisor" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="studentId" property="studentid" jdbcType="VARCHAR" />
+    <result column="facultyId" property="facultyid" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, studentId, facultyId
+  </sql>
+  
+  <resultMap id="FacultyResultMap" type="ncu.zss.rbs.model.Faculty" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="idDigest" property="idDigest" jdbcType="CHAR" />
+    <result column="password" property="password" jdbcType="CHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="designation" property="designation" jdbcType="VARCHAR" />
+    <result column="gender" property="gender" jdbcType="BIT" />
+    <result column="office" property="office" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <!-- Select supervisor of the sutdent's class. -->
+  <select id="selectClassSupervisor" resultMap="FacultyResultMap">
+  	select F.id, F.idDigest, F.name, F.designation, F.gender, F.office, F.phone
+		from Faculty as F
+    	join (select C.facultyId
+				from Class as C
+				join (select className
+						from Student
+						where id = #{studentId,jdbcType=VARCHAR}) as SC
+				on C.`name` = SC.className) as FC
+		on F.id = FC.facultyId;
+  </select>
+  
+  <!-- Select supervisor list of a student specified by id. -->
+  <select id="selectSupervisorList" resultMap="FacultyResultMap">
+  	select F.id, F.idDigest, F.name, F.designation, F.gender, F.office, F.phone
+  		from (select facultyId
+  				from Supervisor
+  				where studentId = #{studentId,jdbcType=VARCHAR}) as S
+  		join Faculty as F
+  		on S.facultyId = F.id
+  		limit #{fromIndex,jdbcType=INTEGER}, 20;
+  </select>
+  
+  <!-- Select supervisor of the student. -->
+  <select id="selectSupervisor" resultMap="BaseResultMap">
+  	select *
+  		from Supervisor
+  		where studentId = #{studentId,jdbcType=VARCHAR}
+  			and facultyId = #{facultyId,jdbcType=VARCHAR};
+  </select>
+  
+  <!-- Insert a supervisor to student. -->
+  <insert id="insertSupervisor">
+  	insert into Supervisor (studentId, facultyId)
+  		values (#{studentId,jdbcType=VARCHAR}, #{facultyId,jdbcType=VARCHAR});
+  </insert>
+  
+  <!-- Delete a supervisor of the student. -->
+  <delete id="deleteSupervisor">
+  	delete
+  		from Supervisor
+  		where studentId = #{studentId,jdbcType=VARCHAR}
+  			and facultyId = #{facultyId,jdbcType=VARCHAR};
+  </delete>
+  
+</mapper>

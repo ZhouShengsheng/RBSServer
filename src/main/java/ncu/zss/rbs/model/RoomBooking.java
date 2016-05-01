@@ -3,7 +3,23 @@ package ncu.zss.rbs.model;
 import java.util.Date;
 
 public class RoomBooking {
-    private Integer id;
+    public long getFromTimestamp() {
+		return fromTimestamp;
+	}
+
+	public void setFromTimestamp(long fromTimestamp) {
+		this.fromTimestamp = fromTimestamp;
+	}
+
+	public long getToTimestamp() {
+		return toTimestamp;
+	}
+
+	public void setToTimestamp(long toTimestamp) {
+		this.toTimestamp = toTimestamp;
+	}
+
+	private Integer id;
 
     private String groupid;
 
@@ -16,8 +32,12 @@ public class RoomBooking {
     private String applicantid;
 
     private Date fromtime;
+    
+    private long fromTimestamp;
 
     private Date totime;
+    
+    private long toTimestamp;
 
     private String bookreason;
 

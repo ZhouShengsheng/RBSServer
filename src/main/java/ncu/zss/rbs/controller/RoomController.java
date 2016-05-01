@@ -45,6 +45,7 @@ public class RoomController {
 	
 	/**
 	 * Get room list.
+	 * 
 	 * @param fromIndex -1 to retrieve all rooms. Otherwise, retrieve 20 rooms from fromIndex.
 	 * @return
 	 */

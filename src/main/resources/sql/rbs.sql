@@ -55,3 +55,24 @@ select F.*
 					where id = '8000112164') as SC
 			on C.`name` = SC.className) as FC
 	on F.id = FC.facultyId;
+
+select now();
+
+desc RoomBooking;
+select * from RoomBooking;
+select uuid();
+insert into RoomBooking (groupId, roomBuilding, roomNumber, 
+		applicantType, applicantId, fromTime, toTime,
+        bookReason, `status`, adminId, facultyId)
+	values (uuid(), '软件楼', '108',
+		'student', '8000112164', '2016-05-02 19:00:00', '2016-05-02 20:30:00',
+        'test', 'created', (select id from Admin), '10003');
+
+select UNIX_TIMESTAMP(now());
+select groupId, roomBuilding, roomNumber, 
+		applicantType, applicantId, fromTime, toTime,
+        bookReason, `status`, adminId, facultyId
+	from RoomBooking
+    where roomBuilding = '软件楼'
+		and roomNumber = '108';
+

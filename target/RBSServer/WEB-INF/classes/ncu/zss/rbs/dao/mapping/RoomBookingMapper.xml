@@ -14,6 +14,9 @@
     <result column="progress" property="progress" jdbcType="SMALLINT" />
     <result column="adminId" property="adminid" jdbcType="VARCHAR" />
     <result column="facultyId" property="facultyid" jdbcType="VARCHAR" />
+    <result column="declineReason" property="declineReason" jdbcType="VARCHAR" />
+    <result column="expired" property="expired" jdbcType="BIT" />
+    <result column="creationTime" property="creationTime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, groupId, roomBuilding, roomNumber, applicantType, applicantId, fromTime, toTime, 
@@ -49,5 +52,12 @@
 			#{applicantType,jdbcType=VARCHAR}, #{applicantId,jdbcType=VARCHAR}, #{fromTime,jdbcType=TIMESTAMP}, #{toTime,jdbcType=TIMESTAMP},
 			#{bookReason,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, (select id from Admin limit 0,1), #{facultyId,jdbcType=VARCHAR});
   </insert>
+  
+  <!-- Cancel booking room. -->
+  <update id="updateToCancelBooking">
+  	update RoomBooking
+  		set `status` = 'canceled'
+  		where groupId = #{groupId,jdbcType=VARCHAR};
+  </update>
   
 </mapper>

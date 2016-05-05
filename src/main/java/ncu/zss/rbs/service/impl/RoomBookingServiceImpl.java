@@ -9,9 +9,13 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import ncu.zss.rbs.dao.RoomBookingGroupMapper;
+import ncu.zss.rbs.dao.RoomBookingInfoMapper;
 import ncu.zss.rbs.dao.RoomBookingMapper;
 import ncu.zss.rbs.dao.RoomMapper;
 import ncu.zss.rbs.model.RoomBooking;
+import ncu.zss.rbs.model.RoomBookingGroup;
+import ncu.zss.rbs.model.RoomBookingInfo;
 import ncu.zss.rbs.service.RoomBookingService;
 
 @Service("roomBookingServiceImpl")
@@ -24,6 +28,12 @@ public class RoomBookingServiceImpl implements RoomBookingService {
 	
 	@Autowired
 	RoomBookingMapper roomBookingMapper;
+	
+	@Autowired
+	RoomBookingGroupMapper roomBookingGroupMapper;
+	
+	@Autowired
+	RoomBookingInfoMapper roomBookingInfoMapper;
 
 	@Override
 	public List<RoomBooking> getRoomBookingListForRoom(String roomBuilding, String roomNumber) {
@@ -49,6 +59,36 @@ public class RoomBookingServiceImpl implements RoomBookingService {
 					applicantType, applicantId, 
 					timeInterval.get(0), timeInterval.get(1), bookReason, status, facultyId);
 		}
+	}
+
+	@Override
+	public List<RoomBookingGroup> getProcessingList(String applicantType, String applicantId, Integer fromIndex) {
+		return roomBookingGroupMapper.selectProcessingList(applicantType, applicantId, fromIndex);
+	}
+
+	@Override
+	public List<RoomBookingGroup> getApprovedList(String applicantType, String applicantId, Integer fromIndex) {
+		return roomBookingGroupMapper.selectApprovedList(applicantType, applicantId, fromIndex);
+	}
+
+	@Override
+	public List<RoomBookingGroup> getDeclinedList(String applicantType, String applicantId, Integer fromIndex) {
+		return roomBookingGroupMapper.selectDeclinedList(applicantType, applicantId, fromIndex);
+	}
+
+	@Override
+	public RoomBookingInfo getRoomBookingInfo(String groupId) {
+		return roomBookingInfoMapper.selectRoomBookingInfo(groupId);
+	}
+
+	@Override
+	public void cancelBooking(String groupId) {
+		roomBookingMapper.updateToCancelBooking(groupId);
+	}
+
+	@Override
+	public List<RoomBookingGroup> getHistoryList(String applicantType, String applicantId, Integer fromIndex) {
+		return roomBookingGroupMapper.selectHistoryList(applicantType, applicantId, fromIndex);
 	}
 	
 }

@@ -51,4 +51,12 @@ public interface RoomBookingMapper {
 			@Param("status") String status,
 			@Param("facultyId") String facultyId);
 	
+	/**
+	 * Cancel booking room.
+	 * 
+	 * @param groupId
+	 * @return
+	 */
+	void updateToCancelBooking(String groupId);
+	
 }

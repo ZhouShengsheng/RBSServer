@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="ncu.zss.rbs.dao.RoomBookingGroupMapper" >
+  <resultMap id="BaseResultMap" type="ncu.zss.rbs.model.RoomBookingGroup" >
+    <result column="groupId" property="groupid" jdbcType="CHAR" />
+    <result column="roomBuilding" property="roombuilding" jdbcType="VARCHAR" />
+    <result column="roomNumber" property="roomnumber" jdbcType="VARCHAR" />
+    <result column="applicantType" property="applicanttype" jdbcType="CHAR" />
+    <result column="applicantId" property="applicantid" jdbcType="VARCHAR" />
+    <result column="timeIntervals" property="timeintervals" jdbcType="VARCHAR" />
+    <result column="bookReason" property="bookreason" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="CHAR" />
+    <result column="adminId" property="adminid" jdbcType="VARCHAR" />
+    <result column="facultyId" property="facultyid" jdbcType="VARCHAR" />
+    <result column="declineReason" property="declinereason" jdbcType="VARCHAR" />
+    <result column="expired" property="expired" jdbcType="TINYINT" />
+    <result column="creationTime" property="creationtime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <!-- Select room booking processing list. -->
+  <select id="selectProcessingList" resultMap="BaseResultMap">
+  	select *
+		from View_RoomBookingGroup
+		where applicantType = #{applicantType,jdbcType=VARCHAR}
+			and applicantId = #{applicantId,jdbcType=VARCHAR}
+        	and (`status` = 'created'
+				or `status` = 'faculty_approved')
+        limit #{fromIndex,jdbcType=INTEGER}, 20;
+  </select>
+  
+  <!-- Select room booking approved list. -->
+  <select id="selectApprovedList" resultMap="BaseResultMap">
+  	select *
+		from View_RoomBookingGroup
+		where applicantType = #{applicantType,jdbcType=VARCHAR}
+			and applicantId = #{applicantId,jdbcType=VARCHAR}
+        	and `status` = 'admin_approved'
+        limit #{fromIndex,jdbcType=INTEGER}, 20;
+  </select>
+  
+  <!-- Select room booking declined list. -->
+  <select id="selectDeclinedList" resultMap="BaseResultMap">
+  	select *
+		from View_RoomBookingGroup
+		where applicantType = #{applicantType,jdbcType=VARCHAR}
+			and applicantId = #{applicantId,jdbcType=VARCHAR}
+        	and (`status` = 'faculty_declined'
+				or `status` = 'admin_declined')
+        limit #{fromIndex,jdbcType=INTEGER}, 20;
+  </select>
+  
+  <!-- Select room booking history list. -->
+  <select id="selectHistoryList" resultMap="BaseResultMap">
+  	select *
+		from View_RoomBookingGroup
+		where applicantType = #{applicantType,jdbcType=VARCHAR}
+			and applicantId = #{applicantId,jdbcType=VARCHAR}
+        	and ((`status` = 'admin_approved'
+        			and expired = 1)
+				or `status` = 'canceled')
+        limit #{fromIndex,jdbcType=INTEGER}, 20;
+  </select>
+  
+</mapper>

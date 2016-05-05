@@ -2,10 +2,7 @@ package ncu.zss.rbs.model;
 
 import java.util.Date;
 
-public class RoomBooking {
-
-	private Integer id;
-
+public class RoomBookingGroup {
     private String groupid;
 
     private String roombuilding;
@@ -16,59 +13,21 @@ public class RoomBooking {
 
     private String applicantid;
 
-    private Date fromtime;
-    
-    private long fromTimestamp;
-
-    private Date totime;
-    
-    private long toTimestamp;
+    private String timeintervals;
 
     private String bookreason;
 
-    private Short progress;
+    private String status;
 
     private String adminid;
 
     private String facultyid;
-    
-    private String declinedReason;
-    
-    private boolean expired;
-    
-    private String creationTime;
-    
-    public String getDeclinedReason() {
-		return declinedReason;
-	}
 
-	public void setDeclinedReason(String declinedReason) {
-		this.declinedReason = declinedReason;
-	}
+    private String declinereason;
 
-	public long getFromTimestamp() {
-		return fromTimestamp;
-	}
+    private Byte expired;
 
-	public void setFromTimestamp(long fromTimestamp) {
-		this.fromTimestamp = fromTimestamp;
-	}
-
-	public long getToTimestamp() {
-		return toTimestamp;
-	}
-
-	public void setToTimestamp(long toTimestamp) {
-		this.toTimestamp = toTimestamp;
-	}
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
+    private Date creationtime;
 
     public String getGroupid() {
         return groupid;
@@ -110,20 +69,12 @@ public class RoomBooking {
         this.applicantid = applicantid == null ? null : applicantid.trim();
     }
 
-    public Date getFromtime() {
-        return fromtime;
+    public String getTimeintervals() {
+        return timeintervals;
     }
 
-    public void setFromtime(Date fromtime) {
-        this.fromtime = fromtime;
-    }
-
-    public Date getTotime() {
-        return totime;
-    }
-
-    public void setTotime(Date totime) {
-        this.totime = totime;
+    public void setTimeintervals(String timeintervals) {
+        this.timeintervals = timeintervals == null ? null : timeintervals.trim();
     }
 
     public String getBookreason() {
@@ -134,12 +85,12 @@ public class RoomBooking {
         this.bookreason = bookreason == null ? null : bookreason.trim();
     }
 
-    public Short getProgress() {
-        return progress;
+    public String getStatus() {
+        return status;
     }
 
-    public void setProgress(Short progress) {
-        this.progress = progress;
+    public void setStatus(String status) {
+        this.status = status == null ? null : status.trim();
     }
 
     public String getAdminid() {
@@ -157,21 +108,28 @@ public class RoomBooking {
     public void setFacultyid(String facultyid) {
         this.facultyid = facultyid == null ? null : facultyid.trim();
     }
-    
-    public boolean isExpired() {
-		return expired;
-	}
 
-	public void setExpired(boolean expired) {
-		this.expired = expired;
-	}
-	
-	public String getCreationTime() {
-		return creationTime;
-	}
+    public String getDeclinereason() {
+        return declinereason;
+    }
 
-	public void setCreationTime(String creationTime) {
-		this.creationTime = creationTime;
-	}
+    public void setDeclinereason(String declinereason) {
+        this.declinereason = declinereason == null ? null : declinereason.trim();
+    }
 
+    public Byte getExpired() {
+        return expired;
+    }
+
+    public void setExpired(Byte expired) {
+        this.expired = expired;
+    }
+
+    public Date getCreationtime() {
+        return creationtime;
+    }
+
+    public void setCreationtime(Date creationtime) {
+        this.creationtime = creationtime;
+    }
 }

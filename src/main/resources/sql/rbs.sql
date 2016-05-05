@@ -76,3 +76,61 @@ select groupId, roomBuilding, roomNumber,
     where roomBuilding = '软件楼'
 		and roomNumber = '108';
 
+select id from Admin limit 0,1;
+
+desc `RoomBooking`;
+select * from rbs.`RoomBooking`
+        where toTime < now();
+
+update rbs.`RoomBooking`
+		set `status` = 'created'
+        where `status` = 'expired';
+
+update RoomBooking
+	set expired = 0;
+
+alter table RoomBooking add column declineReason varchar(1024);
+alter table RoomBooking 
+	change column expired expired tinyint not null default 0;
+alter table RoomBooking 
+	change column `status` `status` enum('created','canceled','faculty_declined','faculty_approved','admin_declined','admin_approved')
+		not null default 'created';
+alter table RoomBooking 
+	add column creationDate datetime not null default now();
+alter table RoomBooking 
+	change column creationDate creationTime datetime not null default now();
+
+create index index_expired on RoomBooking(expired);
+create index index_creationDate on RoomBooking(creationDate);
+
+
+-- Room booking.
+-- Applying.
+select *
+	from View_RoomBookingGroup
+	where applicantType = 'student'
+		and applicantId = '8000112164'
+        and (`status` = 'created'
+			or `status` = 'faculty_approved');
+
+-- Approved.
+select RA.*, F.`name` as facultyName, F.designation as facultyDesignation,
+		F.gender as facultyGender, F.office as facultyOffice, F.phone as facultyPhone
+	from (select R.*, A.`name` as adminName, A.designation as adminDesignation, 
+				A.gender as adminGender, A.office as adminOffice, A.phone as adminPhone
+			from (select *
+					from View_RoomBookingGroup
+					where `status` = 'admin_approved') as R
+			join Faculty as A
+			on R.adminId = A.id) as RA
+    join Faculty as F
+    on RA.facultyId = F.id;
+
+-- Declined.
+select *
+	from View_RoomBookingGroup
+    where `status` = 'faculty_declined'
+		or `status` = 'admin_declined';
+
+
+

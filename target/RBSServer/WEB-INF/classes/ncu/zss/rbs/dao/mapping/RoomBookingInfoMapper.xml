@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="ncu.zss.rbs.dao.RoomBookingInfoMapper" >
+  <resultMap id="BaseResultMap" type="ncu.zss.rbs.model.RoomBookingInfo" >
+    <result column="groupId" property="groupid" jdbcType="CHAR" />
+    <result column="roomBuilding" property="roombuilding" jdbcType="VARCHAR" />
+    <result column="roomNumber" property="roomnumber" jdbcType="VARCHAR" />
+    <result column="applicantType" property="applicanttype" jdbcType="CHAR" />
+    <result column="applicantId" property="applicantid" jdbcType="VARCHAR" />
+    <result column="timeIntervals" property="timeintervals" jdbcType="VARCHAR" />
+    <result column="bookReason" property="bookreason" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="CHAR" />
+    <result column="adminId" property="adminid" jdbcType="VARCHAR" />
+    <result column="facultyId" property="facultyid" jdbcType="VARCHAR" />
+    <result column="declineReason" property="declinereason" jdbcType="VARCHAR" />
+    <result column="expired" property="expired" jdbcType="TINYINT" />
+    <result column="creationTime" property="creationtime" jdbcType="TIMESTAMP" />
+    <result column="adminName" property="adminname" jdbcType="VARCHAR" />
+    <result column="adminDesignation" property="admindesignation" jdbcType="VARCHAR" />
+    <result column="adminGender" property="admingender" jdbcType="BIT" />
+    <result column="adminOffice" property="adminoffice" jdbcType="VARCHAR" />
+    <result column="adminPhone" property="adminphone" jdbcType="VARCHAR" />
+    <result column="facultyName" property="facultyname" jdbcType="VARCHAR" />
+    <result column="facultyDesignation" property="facultydesignation" jdbcType="VARCHAR" />
+    <result column="facultyGender" property="facultygender" jdbcType="BIT" />
+    <result column="facultyOffice" property="facultyoffice" jdbcType="VARCHAR" />
+    <result column="facultyPhone" property="facultyphone" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <!-- Select room booking detailed info. -->
+  <select id="selectRoomBookingInfo" resultMap="BaseResultMap">
+  	select *
+  		from View_RoomBookingInfo
+  		where groupId=#{groupId,jdbcType=VARCHAR};
+  </select>
+  
+</mapper>

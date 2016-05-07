@@ -15,16 +15,24 @@
   <select id="selectRoomList" resultMap="BaseResultMap">
   	select *
   		from Room
-  		where building = #{building,jdbcType=VARCHAR}
-  		order by number;
+  		<where>
+  			<if test="building != null">
+  				building = #{building,jdbcType=VARCHAR}
+  			</if>
+  		</where>
+  		order by building desc, number;
   </select>
   
   <!-- Select room of building from index. -->
   <select id="selectRoomListWithFromIndex" resultMap="BaseResultMap">
   	select *
   		from Room
-  		where building = #{building,jdbcType=VARCHAR}
-  		order by number
+  		<where>
+  			<if test="building != null">
+  				building = #{building,jdbcType=VARCHAR}
+  			</if>
+  		</where>
+  		order by building desc, number
   		limit #{fromIndex,jdbcType=INTEGER}, 20;
   </select>
   

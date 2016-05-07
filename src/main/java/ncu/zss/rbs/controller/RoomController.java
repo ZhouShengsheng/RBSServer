@@ -54,11 +54,7 @@ public class RoomController {
 	public String getRoomList(String building,
 			@RequestParam(value = "fromIndex", defaultValue = "0") Integer fromIndex) {
 		
-		// Check parameters.
-		if (building == null) {
-			return JsonUtil.parameterMissingResponse("building");
-		}
-		
+		// Check parameters.		
 		if (fromIndex < -1) {
 			return JsonUtil.simpleMessageResponse("Invalid parameter fromIndex.");
 		}

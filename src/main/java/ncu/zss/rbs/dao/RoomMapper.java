@@ -14,7 +14,7 @@ public interface RoomMapper {
 	 * @param building
 	 * @return
 	 */
-	List<Room> selectRoomList(String building);
+	List<Room> selectRoomList(@Param("building") String building);
 	
 	/**
 	 * Select room of building from index.

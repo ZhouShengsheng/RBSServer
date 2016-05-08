@@ -51,8 +51,13 @@ public class RoomController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/list", method = RequestMethod.POST)
-	public String getRoomList(String building,
+	public String getRoomList(String building, Integer capacity, Integer hasMultiMedia, String timeIntervals,
 			@RequestParam(value = "fromIndex", defaultValue = "0") Integer fromIndex) {
+		logger.info("哈哈");
+		logger.info("1");
+		logger.info(String.format("building: %s\ncapacity: %d\nhasMultiMedia: %d\ntimeIntervals: %s\n", 
+				building, capacity, hasMultiMedia, timeIntervals));
+		logger.info("2");
 		
 		// Check parameters.		
 		if (fromIndex < -1) {

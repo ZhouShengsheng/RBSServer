@@ -135,3 +135,5 @@ select *
 desc Faculty;
 select * from Faculty;
 update Faculty set password=sha1('12345') where id='10001';
+
+desc RoomBooking;

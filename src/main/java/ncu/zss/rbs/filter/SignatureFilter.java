@@ -70,6 +70,7 @@ public class SignatureFilter extends OncePerRequestFilter {
 	 */
 	private boolean isSpecialURI(HttpServletRequest request) {
 		String uri = request.getRequestURI();
+		logger.info("Request uri: " + uri);
 		if (uri.contains("/user/login") ||
 				uri.contains("/hostname")) {
 			return true;

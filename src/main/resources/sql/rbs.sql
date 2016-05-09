@@ -137,3 +137,12 @@ select * from Faculty;
 update Faculty set password=sha1('12345') where id='10001';
 
 desc RoomBooking;
+
+select * from RoomBooking;
+update RoomBooking set `status` = 'admin_approved' where id = 15 or id = 16;
+
+select * from Room
+	where concat(building, `number`) regexp '.*软件楼101.*';
+
+select * from Room
+	where concat(building, `number`) like '%软件楼101%';

@@ -36,6 +36,34 @@
   		limit #{fromIndex,jdbcType=INTEGER}, 20;
   </select>
   
+  <!-- Select room list by screen. -->
+  <select id="selectRoomListWithScreenCondition" resultMap="BaseResultMap">
+  	select *
+  		from Room
+  		<where>
+  			<if test="building != null">
+  				building = #{building,jdbcType=VARCHAR}
+  			</if>
+  			<if test="capacity != 0">
+  				and capacity >= #{capacity,jdbcType=SMALLINT}
+  			</if>
+  			<if test="hasMultiMedia != null">
+  				and hasMultiMedia = #{hasMultiMedia,jdbcType=BIT}
+  			</if>
+  		</where>
+  		order by building desc, number;
+  </select>
+  
+  <!-- Select room list by search. -->
+  <select id="selectRoomListWithSearchCondition" resultMap="BaseResultMap">
+  	select *
+  		from Room
+  		<where>
+  			concat(building, `number`) like #{condition,jdbcType=VARCHAR}
+  		</where>
+  		order by building desc, number;
+  </select>
+  
   <!-- Insert room. -->
   <insert id="insertRoom">
   	insert into Room (building, number, capacity, hasMultiMedia)

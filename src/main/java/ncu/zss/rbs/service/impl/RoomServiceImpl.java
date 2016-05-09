@@ -24,7 +24,17 @@ public class RoomServiceImpl implements RoomService {
 	public List<Room> getRoomList(String building, Integer fromIndex) {
 		return roomMapper.selectRoomListWithFromIndex(building, fromIndex);
 	}
+	
+	@Override
+	public List<Room> getRoomList(String building, Integer capacity, Integer hasMultiMedia) {
+		return roomMapper.selectRoomListWithScreenCondition(building, capacity, hasMultiMedia);
+	}
 
+	@Override
+	public List<Room> searchRoomList(String condition) {
+		return roomMapper.selectRoomListWithSearchCondition(String.format("%%%s%%", condition));
+	}
+	
 	@Override
 	public void addRoom(String building, String number, Integer capacity, Integer hasMultiMedia) {
 		roomMapper.insertRoom(building, number, capacity, hasMultiMedia);

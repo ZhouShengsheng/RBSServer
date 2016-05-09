@@ -2,6 +2,7 @@ package ncu.zss.rbs.util;
 
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -61,6 +62,19 @@ public class JsonUtil {
 	@SuppressWarnings("unchecked")
 	public static HashMap<String, Object> jsonStringToMap(String json) throws JsonParseException, JsonMappingException, IOException {
 		return mapper.readValue(json, HashMap.class);
+	}
+	
+	/**
+	 * Convert json string to array list.
+	 * @param json Json string.
+	 * @return Hash map.
+	 * @throws JsonParseException
+	 * @throws JsonMappingException
+	 * @throws IOException
+	 */
+	@SuppressWarnings("unchecked")
+	public static ArrayList<Object> jsonStringToList(String json) throws JsonParseException, JsonMappingException, IOException {
+		return mapper.readValue(json, ArrayList.class);
 	}
 	
 	/**

@@ -31,7 +31,7 @@
 		from RoomBooking
    		where roomBuilding = #{roomBuilding,jdbcType=VARCHAR}
 			and roomNumber = #{roomNumber,jdbcType=VARCHAR}
-			and `status` != 'admin_approved';
+			and `status` = 'admin_approved';
   </select>
   
   <!-- Select room booking list for specific applicant. -->

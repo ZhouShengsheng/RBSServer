@@ -25,6 +25,25 @@ public interface RoomService {
 	List<Room> getRoomList(String building, Integer fromIndex);
 	
 	/**
+	 * Get room list.
+	 * 
+	 * @param building
+	 * @param capacity
+	 * @param hasMultiMedia
+	 * @param timeIntervals
+	 * @return All the rooms matched the condition.
+	 */
+	List<Room> getRoomList(String building, Integer capacity, Integer hasMultiMedia);
+	
+	/**
+	 * Search room list.
+	 * 
+	 * @param condition
+	 * @return
+	 */
+	List<Room> searchRoomList(String condition);
+	
+	/**
 	 * Add room.
 	 * 
 	 * @param building

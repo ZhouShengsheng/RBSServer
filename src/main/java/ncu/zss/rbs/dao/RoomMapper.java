@@ -24,6 +24,26 @@ public interface RoomMapper {
 	 * @return
 	 */
 	List<Room> selectRoomListWithFromIndex(@Param("building") String building, @Param("fromIndex") Integer fromIndex);
+
+	/**
+	 * Select room list by screen.
+	 * 
+	 * @param building
+	 * @param capacity
+	 * @param hasMultiMedia
+	 * @param timeIntervals
+	 * @return
+	 */
+	List<Room> selectRoomListWithScreenCondition(@Param("building") String building, @Param("capacity") Integer capacity,
+			@Param("hasMultiMedia") Integer hasMultiMedia);
+
+	/**
+	 * Select room list by search.
+	 * 
+	 * @param condition
+	 * @return
+	 */
+	List<Room> selectRoomListWithSearchCondition(@Param("condition") String condition);
 	
 	/**
 	 * Insert room.

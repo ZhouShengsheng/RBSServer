@@ -38,6 +38,7 @@
 /Users/jackjones/Workspaces/eclipse/RBSServer/src/main/java/ncu/zss/rbs/dao/ClassMapper.java
 /Users/jackjones/Workspaces/eclipse/RBSServer/src/main/java/ncu/zss/rbs/db/manager/RedisManager.java
 /Users/jackjones/Workspaces/eclipse/RBSServer/src/main/java/ncu/zss/rbs/util/JsonUtil.java
+/Users/jackjones/Workspaces/eclipse/RBSServer/src/main/java/ncu/zss/rbs/util/TimeIntervalUtil.java
 /Users/jackjones/Workspaces/eclipse/RBSServer/src/main/java/ncu/zss/rbs/controller/RoomBookingController.java
 /Users/jackjones/Workspaces/eclipse/RBSServer/src/main/java/ncu/zss/rbs/db/manager/DataSource.java
 /Users/jackjones/Workspaces/eclipse/RBSServer/src/main/java/ncu/zss/rbs/service/impl/FavoriteRoomServiceImpl.java

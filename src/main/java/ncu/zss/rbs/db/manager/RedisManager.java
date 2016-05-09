@@ -19,6 +19,7 @@ public class RedisManager {
 	// Redis DBs.
 	public static final int DB_ADMIN = 1;
 	public static final int DB_USER = 2;
+	public static final int DB_ROOM_LIST = 3;
 	
 	// Default expire time.
 	public static final int EXPIRE_TIME = 7 * 24 * 3600;
@@ -83,7 +84,9 @@ public class RedisManager {
 			jedis = getInstance().getJedis();
 			jedis.select(db);
 			jedis.set(key, value);
-			jedis.expire(key, expire);
+			if (expire > -1) {
+				jedis.expire(key, expire);
+			}
 		}catch (Exception e) {
 			e.printStackTrace();
 		}finally {
@@ -172,6 +175,17 @@ public class RedisManager {
 		}
 	}
 	
-	
+	public static void flushDB(int db) {
+		Jedis jedis = null;
+		try {
+			jedis = getInstance().getJedis();
+			jedis.select(db);
+			jedis.flushDB();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			getInstance().returnJedis(jedis);
+		}
+	}
 
 }

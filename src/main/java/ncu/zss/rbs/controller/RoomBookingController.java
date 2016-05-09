@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.alibaba.fastjson.JSONArray;
-
 import ncu.zss.rbs.model.RoomBooking;
 import ncu.zss.rbs.model.RoomBookingGroup;
 import ncu.zss.rbs.model.RoomBookingInfo;
@@ -27,6 +25,7 @@ import ncu.zss.rbs.service.RoomService;
 import ncu.zss.rbs.service.SupervisorService;
 import ncu.zss.rbs.service.UserService;
 import ncu.zss.rbs.util.JsonUtil;
+import ncu.zss.rbs.util.TimeIntervalUtil;
 
 /**
  * APIs related to room.
@@ -105,50 +104,12 @@ public class RoomBookingController {
 		}
 		
 		// Get time intervals.
-		ArrayList<ArrayList<Date>> timeIntervalList = new ArrayList<>();
-		JSONArray times = JSONArray.parseArray(timeIntervals);
-		for (Object object : times) {
-			JSONArray timeIntervalObject = (JSONArray)object;
-			ArrayList<Date> timeInterval = new ArrayList<>();
-			timeInterval.add(timeIntervalObject.getDate(0));
-			timeInterval.add(timeIntervalObject.getDate(1));
-			timeIntervalList.add(timeInterval);
-		}
-		// Convert to timestamps.
-		ArrayList<ArrayList<Long>> timestampIntervalList = new ArrayList<>();
-		for (ArrayList<Date> timeInterval : timeIntervalList) {
-			ArrayList<Long> timestampInterval = new ArrayList<>();
-			timestampInterval.add(timeInterval.get(0).getTime());
-			timestampInterval.add(timeInterval.get(1).getTime());
-			timestampIntervalList.add(timestampInterval);
-		}
+		ArrayList<ArrayList<Date>> timeIntervalList = TimeIntervalUtil.getTimeIntervalListFromJsonString(timeIntervals);
 
 		// Check time overlaps.
 		List<RoomBooking> roomBookingList = roomBookingService.getRoomBookingListForRoom(roomBuilding, roomNumber);
-		for (RoomBooking roomBooking : roomBookingList) {
-			roomBooking.setFromTimestamp(roomBooking.getFromtime().getTime());
-			roomBooking.setToTimestamp(roomBooking.getTotime().getTime());
-		}
-		boolean timeIntervalOverlapped = false;
 		ArrayList<ArrayList<Date>> overlappedTimeIntervalList = new ArrayList<>();
-		int timeIntervalCount = timestampIntervalList.size();
-		for (int i = 0; i < timeIntervalCount; i++) {
-			ArrayList<Long> timestampInterval = timestampIntervalList.get(i);
-			for (RoomBooking roomBooking : roomBookingList) {
-				long fromTimestamp = timestampInterval.get(0);
-				if (fromTimestamp >= roomBooking.getToTimestamp()) {
-					continue;
-				}
-				
-				long toTimestamp = timestampInterval.get(1);
-				if (toTimestamp <= roomBooking.getFromTimestamp()) {
-					continue;
-				}
-				
-				timeIntervalOverlapped = true;
-				overlappedTimeIntervalList.add(timeIntervalList.get(i));
-			}
-		}
+		boolean timeIntervalOverlapped = TimeIntervalUtil.checkTimeIntervalOverlaps(roomBookingList, timeIntervalList, true, overlappedTimeIntervalList);
 		
 		// Time interval overlapped.
 		if (timeIntervalOverlapped) {

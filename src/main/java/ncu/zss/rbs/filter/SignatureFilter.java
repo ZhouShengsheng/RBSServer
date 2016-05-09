@@ -41,7 +41,7 @@ public class SignatureFilter extends OncePerRequestFilter {
 		// Check request timestamp.
 		String timestamp = request.getParameter("timestamp");
 		long timeDiff = new Date().getTime()/1000 - Integer.parseInt(timestamp);
-		if (timeDiff >= requestTimeout || timeDiff < 0) {
+		if (timeDiff >= requestTimeout) {
 			logger.warn("Request timeout.");
 			Writer writer = response.getWriter();
 			writer.write(JsonUtil.simpleMessageResponse("Request timeout."));

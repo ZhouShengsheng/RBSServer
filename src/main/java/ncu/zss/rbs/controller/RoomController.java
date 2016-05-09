@@ -1,6 +1,8 @@
 package ncu.zss.rbs.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -14,11 +16,18 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+
+import ncu.zss.rbs.db.manager.RedisManager;
 import ncu.zss.rbs.model.Room;
+import ncu.zss.rbs.model.RoomBooking;
 import ncu.zss.rbs.service.FavoriteRoomService;
+import ncu.zss.rbs.service.RoomBookingService;
 import ncu.zss.rbs.service.RoomService;
 import ncu.zss.rbs.service.UserService;
 import ncu.zss.rbs.util.JsonUtil;
+import ncu.zss.rbs.util.TimeIntervalUtil;
 
 /**
  * APIs related to room.
@@ -43,45 +52,179 @@ public class RoomController {
 	@Qualifier("favoriteRoomServiceImpl")
 	FavoriteRoomService favoriteRoomService;
 	
+	@Autowired
+	@Qualifier("roomBookingServiceImpl")
+	RoomBookingService roomBookingService;
+	
 	/**
 	 * Get room list.
 	 * 
 	 * @param fromIndex -1 to retrieve all rooms. Otherwise, retrieve 20 rooms from fromIndex.
 	 * @return
+	 * @throws IOException 
+	 * @throws JsonMappingException 
+	 * @throws JsonParseException 
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/list", method = RequestMethod.POST)
 	public String getRoomList(String building, Integer capacity, Integer hasMultiMedia, String timeIntervals,
-			@RequestParam(value = "fromIndex", defaultValue = "0") Integer fromIndex) {
-		logger.info("哈哈");
-		logger.info("1");
-		logger.info(String.format("building: %s\ncapacity: %d\nhasMultiMedia: %d\ntimeIntervals: %s\n", 
-				building, capacity, hasMultiMedia, timeIntervals));
-		logger.info("2");
+			@RequestParam(value = "fromIndex", defaultValue = "0") Integer fromIndex) throws JsonParseException, JsonMappingException, IOException {
 		
 		// Check parameters.		
 		if (fromIndex < -1) {
 			return JsonUtil.simpleMessageResponse("Invalid parameter fromIndex.");
 		}
+
+		// Redis key.
+		String roomListKey = String.format("screen:building=%s&capacity=%d&hasMultiMedia=%d&timeIntervals=%s", building, capacity,
+				hasMultiMedia, timeIntervals);
+		logger.info("roomListKey: " + roomListKey);
+		// Get room list from redis.
+		String roomListJsonString = RedisManager.getStringValueRedis(RedisManager.DB_ROOM_LIST, roomListKey);
+		if (roomListJsonString != null) {
+			logger.info("Get result in redis!");
+			if (fromIndex == -1) {
+				return roomListJsonString;
+			}
+			// Page.
+			List<Object> roomList = JsonUtil.jsonStringToList(roomListJsonString);
+			//logger.info("getting pageRoomList");
+			int size = roomList.size();
+			if (fromIndex >= size) {
+				return JsonUtil.emptyArrayResponse();
+			}
+			int pageSize = 20;
+			List<Object> pageRoomList;
+			if (size - fromIndex >= pageSize) {
+				pageRoomList = roomList.subList(fromIndex, fromIndex+pageSize);
+			} else {
+				pageRoomList = roomList.subList(fromIndex, size);
+			}
+			return JsonUtil.objectToJsonString(pageRoomList);
+		}
 		
-		// Get room list.
-		List<Room> roomList;
-		if (fromIndex == -1) {
-			roomList = roomService.getRoomList(building);
-		} else {
-			roomList = roomService.getRoomList(building, fromIndex);
+		// Get room list from database.
+		List<Room> roomList = roomService.getRoomList(building, capacity, hasMultiMedia);
+		ArrayList<ArrayList<Date>> timeIntervalList = TimeIntervalUtil.getTimeIntervalListFromJsonString(timeIntervals);
+		if (timeIntervalList != null) {
+			int count = roomList.size();
+			for (int i = 0; i < count; i++) {
+				Room room = roomList.get(i);
+				List<RoomBooking> roomBookingList = roomBookingService.getRoomBookingListForRoom(room.getBuilding(), room.getNumber());
+				if (TimeIntervalUtil.checkTimeIntervalOverlaps(roomBookingList, timeIntervalList, false, null)) {
+					roomList.remove(i);
+					i--;
+					count--;
+				}
+			}
 		}
 		
 		if (roomList == null || roomList.isEmpty()) {
 			return JsonUtil.emptyArrayResponse();
 		}
-		
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		for (Room room : roomList) {
 			resultList.add(JsonUtil.objectToMap(room));
 		}
+		String resultListString = JsonUtil.objectToJsonString(resultList);
+
+		// Store result list into redis.
+		RedisManager.storeValueInRedis(RedisManager.DB_ROOM_LIST, roomListKey, resultListString, -1);
 		
-		return JsonUtil.objectToJsonString(resultList);
+		if (fromIndex == -1) {
+			return resultListString;
+		}
+		// Page.
+		int size = roomList.size();
+		if (fromIndex >= size) {
+			return JsonUtil.emptyArrayResponse();
+		}
+		int pageSize = 20;
+		List<Map<String, Object>> pageRoomList;
+		if (size - fromIndex >= pageSize) {
+			pageRoomList = resultList.subList(fromIndex, fromIndex+pageSize);
+		} else {
+			pageRoomList = resultList.subList(fromIndex, size);
+		}
+		return JsonUtil.objectToJsonString(pageRoomList);
+	}
+	
+	/**
+	 * Search room.
+	 * 
+	 * @param fromIndex -1 to retrieve all rooms. Otherwise, retrieve 20 rooms from fromIndex.
+	 * @return
+	 * @throws IOException 
+	 * @throws JsonMappingException 
+	 * @throws JsonParseException 
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/search", method = RequestMethod.POST)
+	public String searchRoomList(@RequestParam(value = "condition", defaultValue = "none") String condition,
+			@RequestParam(value = "fromIndex", defaultValue = "0") Integer fromIndex) throws JsonParseException, JsonMappingException, IOException {
+		// Check parameters.		
+		if (fromIndex < -1) {
+			return JsonUtil.simpleMessageResponse("Invalid parameter fromIndex.");
+		}
+
+		// Redis key.
+		String roomListKey = String.format("search:condition=%s", condition);
+		logger.info("roomListKey: " + roomListKey);
+		// Get room list from redis.
+		String roomListJsonString = RedisManager.getStringValueRedis(RedisManager.DB_ROOM_LIST, roomListKey);
+		if (roomListJsonString != null) {
+			logger.info("Get result in redis!");
+			if (fromIndex == -1) {
+				return roomListJsonString;
+			}
+			// Page.
+			List<Object> roomList = JsonUtil.jsonStringToList(roomListJsonString);
+			//logger.info("getting pageRoomList");
+			int size = roomList.size();
+			if (fromIndex >= size) {
+				return JsonUtil.emptyArrayResponse();
+			}
+			int pageSize = 20;
+			List<Object> pageRoomList;
+			if (size - fromIndex >= pageSize) {
+				pageRoomList = roomList.subList(fromIndex, fromIndex+pageSize);
+			} else {
+				pageRoomList = roomList.subList(fromIndex, size);
+			}
+			return JsonUtil.objectToJsonString(pageRoomList);
+		}
+		
+		// Get room list from database.
+		List<Room> roomList = roomService.searchRoomList(condition);
+		
+		if (roomList == null || roomList.isEmpty()) {
+			return JsonUtil.emptyArrayResponse();
+		}
+		List<Map<String, Object>> resultList = new ArrayList<>();
+		for (Room room : roomList) {
+			resultList.add(JsonUtil.objectToMap(room));
+		}
+		String resultListString = JsonUtil.objectToJsonString(resultList);
+
+		// Store result list into redis.
+		RedisManager.storeValueInRedis(RedisManager.DB_ROOM_LIST, roomListKey, resultListString, -1);
+		
+		if (fromIndex == -1) {
+			return resultListString;
+		}
+		// Page.
+		int size = roomList.size();
+		if (fromIndex >= size) {
+			return JsonUtil.emptyArrayResponse();
+		}
+		int pageSize = 20;
+		List<Map<String, Object>> pageRoomList;
+		if (size - fromIndex >= pageSize) {
+			pageRoomList = resultList.subList(fromIndex, fromIndex+pageSize);
+		} else {
+			pageRoomList = resultList.subList(fromIndex, size);
+		}
+		return JsonUtil.objectToJsonString(pageRoomList);
 	}
 	
 	/**

@@ -3,6 +3,7 @@ package ncu.zss.rbs.controller;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -270,13 +271,15 @@ public class RoomController {
 	}
 	
 	/**
-	 * Get room info.
-	 * 
-	 * @param idDigest The admin's id digest.
+	 *  Get room info.
+	 *  
+	 * @param building
+	 * @param number
+	 * @return
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/info", method = RequestMethod.POST)
-	public String getRoomInfo(String building, String number) {
+	public String getRoomInfo(String type, String id, String building, String number) {
 		// Check parameters.
 		if (building == null) {
 			return JsonUtil.parameterMissingResponse("building");
@@ -291,7 +294,25 @@ public class RoomController {
 			return JsonUtil.simpleMessageResponse("Room not found.");
 		}
 		
-		return JsonUtil.objectToJsonString(room);
+		Map<String, Object> resultMap = new HashMap<>();
+		resultMap.put("basicInfo", JsonUtil.objectToMap(room));
+		
+		// Favorite.
+		boolean isFavorite = favoriteRoomService.isFavoriteRoom(type, id, building, number);
+		resultMap.put("isFavorite", isFavorite);
+		
+		// Add booked intervals.
+		List<RoomBooking> roomBookingList = roomBookingService.getRoomBookingListForRoom(building, number);
+		ArrayList<ArrayList<Date>> timeIntervalList = new ArrayList<>();
+		for (RoomBooking roomBooking : roomBookingList) {
+			ArrayList<Date> timeInterval = new ArrayList<>();
+			timeInterval.add(roomBooking.getFromtime());
+			timeInterval.add(roomBooking.getTotime());
+			timeIntervalList.add(timeInterval);
+		}
+		resultMap.put("timeIntervals", timeIntervalList);
+		
+		return JsonUtil.objectToJsonString(resultMap);
 	}
 	
 	/**

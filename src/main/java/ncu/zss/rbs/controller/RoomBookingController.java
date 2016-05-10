@@ -74,6 +74,7 @@ public class RoomBookingController {
 	@RequestMapping(value = "/book", method = RequestMethod.POST)
 	public String bookRoom(String roomBuilding, String roomNumber, String applicantType, String applicantId,
 			String timeIntervals, String bookReason, String facultyId) {
+		logger.info("timeIntervals: " + timeIntervals);
 		// Check parameters.
 		if (roomBuilding == null) {
 			return JsonUtil.parameterMissingResponse("roomBuilding");

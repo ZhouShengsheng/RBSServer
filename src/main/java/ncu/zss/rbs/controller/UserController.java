@@ -1,5 +1,7 @@
 package ncu.zss.rbs.controller;
 
+import java.util.Map;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import ncu.zss.rbs.db.manager.RedisManager;
 import ncu.zss.rbs.model.Faculty;
 import ncu.zss.rbs.model.Student;
+import ncu.zss.rbs.service.SupervisorService;
 import ncu.zss.rbs.service.UserService;
 import ncu.zss.rbs.util.JsonUtil;
 
@@ -29,6 +32,10 @@ public class UserController {
 	@Autowired
 	@Qualifier("userServiceImpl")
 	UserService userService;
+	
+	@Autowired
+	@Qualifier("supervisorServiceImpl")
+	SupervisorService supervisorService;
 	
 	/**
 	 * User login.
@@ -91,7 +98,15 @@ public class UserController {
 				}
 				RedisManager.storeValueInRedis(RedisManager.DB_USER, student.getIdDigest(), student.getId(), RedisManager.EXPIRE_TIME);
 				student.setPassword(null);
-				return JsonUtil.objectToJsonString(student);
+				
+				// Get student supervisor.
+				Faculty supervisor = supervisorService.getClassSupervisor(id);
+				supervisor.setPassword(null);
+				
+				Map<String, Object> resultMap = JsonUtil.objectToMap(student);
+				resultMap.put("supervisor", JsonUtil.objectToMap(supervisor));
+				
+				return JsonUtil.objectToJsonString(resultMap);
 			}
 	
 			default: {

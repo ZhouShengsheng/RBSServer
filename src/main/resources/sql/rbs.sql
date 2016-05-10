@@ -146,3 +146,5 @@ select * from Room
 
 select * from Room
 	where concat(building, `number`) like '%软件楼101%';
+
+select * from Supervisor;

@@ -148,3 +148,12 @@ select * from Room
 	where concat(building, `number`) like '%软件楼101%';
 
 select * from Supervisor;
+
+select R.*
+	from Room as R
+    join (select roomBuilding, roomNumber 
+			from FavoriteRoom
+			where personType = 'student'
+				and personId = '8000112164') as F
+	on R.building = F.roomBuilding
+		and R.`number` = F.roomNumber;

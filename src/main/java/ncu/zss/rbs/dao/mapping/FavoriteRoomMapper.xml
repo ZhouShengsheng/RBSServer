@@ -12,6 +12,13 @@
     id, roomBuilding, roomNumber, personType, personId
   </sql>
   
+  <resultMap id="RoomResultMap" type="ncu.zss.rbs.model.Room" >
+    <id column="building" property="building" jdbcType="VARCHAR" />
+    <id column="number" property="number" jdbcType="VARCHAR" />
+    <result column="capacity" property="capacity" jdbcType="SMALLINT" />
+    <result column="hasMultiMedia" property="hasmultimedia" jdbcType="BIT" />
+  </resultMap>
+  
   <!-- Select a favorite room record. -->
   <select id="selectFavoriteRoom" resultMap="BaseResultMap">
   	select *
@@ -45,5 +52,19 @@
   		where personType = #{type,jdbcType=VARCHAR}
   			and personId = #{id,jdbcType=VARCHAR};
   </delete>
+  
+  <!-- Select favorite room list. -->
+  <select id="selectFavoriteList" resultMap="RoomResultMap">
+  	select R.*
+		from Room as R
+	    join (select roomBuilding, roomNumber 
+				from FavoriteRoom
+				where personType = #{type,jdbcType=VARCHAR}
+					and personId = #{id,jdbcType=VARCHAR}
+				order by id desc
+				limit #{fromIndex,jdbcType=INTEGER}, 20) as F
+		on R.building = F.roomBuilding
+			and R.`number` = F.roomNumber;
+  </select>
   
 </mapper>

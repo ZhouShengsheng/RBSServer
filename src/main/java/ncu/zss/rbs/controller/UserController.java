@@ -179,7 +179,7 @@ public class UserController {
 	@ResponseBody
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	public String updateUserInfo(String idDigest, String type, String id,
-			String designation, Boolean gender, String office, String phone, String dormRoomNumber) {
+			String designation, String office, String phone, String dormRoomNumber) {
 		// Check parameters.
 		if (type == null) {
 			return JsonUtil.parameterMissingResponse("type");
@@ -203,7 +203,6 @@ public class UserController {
 				
 				// Update faculty info.
 				faculty.setDesignation(designation);
-				faculty.setGender(gender);
 				faculty.setOffice(office);
 				faculty.setPhone(phone);
 				userService.updateFaculty(faculty);
@@ -218,7 +217,6 @@ public class UserController {
 				}
 				
 				// Update student info.
-				student.setGender(gender);
 				student.setDormroomnumber(dormRoomNumber);
 				student.setPhone(phone);
 				userService.updateStudent(student);

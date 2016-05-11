@@ -96,7 +96,8 @@ public class SupervisorController {
 	/**
 	 * Delete supervisor.
 	 * 
-	 * @param id Student id.
+	 * @param studentId
+	 * @param facultyId
 	 * @return
 	 */
 	@ResponseBody
@@ -124,6 +125,37 @@ public class SupervisorController {
 		supervisorService.deleteSupervisor(studentId, facultyId);
 		
 		return JsonUtil.simpleMessageResponse("Successfully deleted supervisor.");
+	}
+	
+	/**
+	 * Check whether the supervisor is the student's supervisor.
+	 * 
+	 * @param studentId
+	 * @param facultyId
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/check", method = RequestMethod.POST)
+	public String checkSupervisor(String studentId, String facultyId) {
+		if (studentId == null) {
+			return JsonUtil.parameterMissingResponse("studentId");
+		}
+		
+		if (facultyId == null) {
+			return JsonUtil.parameterMissingResponse("facultyId");
+		}
+		
+		// Check is class supervisor.
+		if (supervisorService.isClassSupervisor(studentId, facultyId)) {
+			return JsonUtil.simpleMessageResponse("Yes.");
+		}
+		
+		// Check is supervisor.
+		if (supervisorService.isSupervisor(studentId, facultyId)) {
+			return JsonUtil.simpleMessageResponse("Yes.");
+		}
+		
+		return JsonUtil.simpleMessageResponse("No.");
 	}
 	
 }

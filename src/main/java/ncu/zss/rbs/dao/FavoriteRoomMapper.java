@@ -1,8 +1,11 @@
 package ncu.zss.rbs.dao;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 
 import ncu.zss.rbs.model.FavoriteRoom;
+import ncu.zss.rbs.model.Room;
 
 public interface FavoriteRoomMapper {
     
@@ -44,5 +47,15 @@ public interface FavoriteRoomMapper {
 	 * @param id
 	 */
 	void clearFavoriteRoom(@Param("type") String type, @Param("id") String id);
+	
+	/**
+	 * Select favorite room list.
+	 * 
+	 * @param type
+	 * @param id
+	 * @param fromIndex
+	 * @return
+	 */
+	List<Room> selectFavoriteList(@Param("type") String type, @Param("id") String id, @Param("fromIndex") Integer fromIndex);
 	
 }

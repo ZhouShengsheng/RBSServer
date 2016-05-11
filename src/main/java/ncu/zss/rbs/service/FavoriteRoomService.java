@@ -1,6 +1,10 @@
 package ncu.zss.rbs.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
+
+import ncu.zss.rbs.model.Room;
 
 @Service
 public interface FavoriteRoomService {
@@ -43,5 +47,15 @@ public interface FavoriteRoomService {
 	 * @param id
 	 */
 	void clearFavoriteRoom(String type, String id);
+	
+	/**
+	 * Get favorite room list.
+	 * 
+	 * @param type
+	 * @param id
+	 * @param fromIndex
+	 * @return
+	 */
+	List<Room>getFavoriteList(String type, String id, Integer fromIndex);
 	
 }

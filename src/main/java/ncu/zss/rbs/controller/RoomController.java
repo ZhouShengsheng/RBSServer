@@ -83,7 +83,7 @@ public class RoomController {
 		// Get room list from redis.
 		String roomListJsonString = RedisManager.getStringValueRedis(RedisManager.DB_ROOM_LIST, roomListKey);
 		if (roomListJsonString != null) {
-			logger.info("Get result in redis!");
+			logger.info("Get result from redis!");
 			if (fromIndex == -1) {
 				return roomListJsonString;
 			}
@@ -174,7 +174,7 @@ public class RoomController {
 		// Get room list from redis.
 		String roomListJsonString = RedisManager.getStringValueRedis(RedisManager.DB_ROOM_LIST, roomListKey);
 		if (roomListJsonString != null) {
-			logger.info("Get result in redis!");
+			logger.info("Get result from redis!");
 			if (fromIndex == -1) {
 				return roomListJsonString;
 			}
@@ -504,5 +504,35 @@ public class RoomController {
 		favoriteRoomService.clearFavoriteRoom(type, id);
 		
 		return JsonUtil.simpleMessageResponse("Successfully cleared favorite.");
+	}
+	
+	/**
+	 * Get favorite room list.
+	 * 
+	 * @param idDigest
+	 * @param type
+	 * @param id
+	 * @param building
+	 * @param number
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/favorite_list", method = RequestMethod.POST)
+	public String getFavoriteList(String idDigest, String type, String id,
+			@RequestParam(value = "fromIndex", defaultValue = "0") Integer fromIndex) {
+		// Check parameters.
+		if (type == null) {
+			return JsonUtil.parameterMissingResponse("type");
+		}
+		if (id == null) {
+			return JsonUtil.parameterMissingResponse("id");
+		}
+		
+		List<Room> favoriteList = favoriteRoomService.getFavoriteList(type, id, fromIndex);
+		if (favoriteList == null || favoriteList.isEmpty()) {
+			return JsonUtil.emptyArrayResponse();
+		}
+		
+		return JsonUtil.objectToJsonString(favoriteList);
 	}
 }

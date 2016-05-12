@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import ncu.zss.rbs.model.RoomBooking;
 import ncu.zss.rbs.model.RoomBookingGroup;
 import ncu.zss.rbs.model.RoomBookingInfo;
+import ncu.zss.rbs.model.StudentBookingGroup;
 
 @Service
 public interface RoomBookingService {
@@ -96,5 +97,14 @@ public interface RoomBookingService {
 	 * @return
 	 */
 	List<RoomBookingGroup> getHistoryList(String applicantType, String applicantId, Integer fromIndex);
+	
+	/**
+	 * Get student booking list.
+	 * 
+	 * @param facultyId
+	 * @param fromIndex
+	 * @return
+	 */
+	List<StudentBookingGroup> getStudentBookingList(String facultyId, Integer fromIndex);
 	
 }

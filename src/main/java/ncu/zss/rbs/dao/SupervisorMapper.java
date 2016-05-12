@@ -49,4 +49,12 @@ public interface SupervisorMapper {
 	 */
 	void deleteSupervisor(@Param("studentId") String studentId, @Param("facultyId") String facultyId);
 	
+	
+	/**
+	 * Search supervisor list.
+	 * 
+	 * @param condition
+	 * @return
+	 */
+	List<Faculty> selectSupervisorListWithCondition(@Param("condition") String condition, @Param("fromIndex") Integer fromIndex);
 }

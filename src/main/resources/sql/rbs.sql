@@ -157,3 +157,32 @@ select R.*
 				and personId = '8000112164') as F
 	on R.building = F.roomBuilding
 		and R.`number` = F.roomNumber;
+
+select * from `Student`;
+
+desc RoomBooking;
+select * from RoomBooking;
+
+desc View_RoomBookingGroup;
+
+select RB.groupId, RB.roomBuilding, RB.roomNumber, RB.timeIntervals, RB.bookReason,
+		RB.adminId, RB.facultyId, RB.groupId, RB.declineReason, creationTime, 
+        S.id as studentId, S.`name` as studentName, S.className as studentClassName,
+        S.gender as studentGender, S.dormRoomNumber as studentDormRoomNumber,
+        S.phone as studentPhone
+	from (select *
+			from View_RoomBookingGroup
+			where `status` = 'created'
+				and expired != 1) as RB
+	join Student as S
+	on RB.applicantId = S.id;
+
+select *
+	from View_RoomBookingGroup;
+
+desc RoomBooking;
+
+select * from View_StudentBookingGroup;
+
+update RoomBooking
+	set bookReason = '测试';

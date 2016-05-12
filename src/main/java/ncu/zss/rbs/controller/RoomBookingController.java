@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import ncu.zss.rbs.model.RoomBooking;
 import ncu.zss.rbs.model.RoomBookingGroup;
 import ncu.zss.rbs.model.RoomBookingInfo;
+import ncu.zss.rbs.model.StudentBookingGroup;
 import ncu.zss.rbs.service.FavoriteRoomService;
 import ncu.zss.rbs.service.RoomBookingService;
 import ncu.zss.rbs.service.RoomService;
@@ -282,6 +283,22 @@ public class RoomBookingController {
 		}
 		
 		return JsonUtil.objectToJsonString(roomBookingGroupList);
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/student_booking_list", method = RequestMethod.POST)
+	public String getStudentBookingyList(String facultyId, @RequestParam(value = "fromIndex", defaultValue = "0") Integer fromIndex) {
+		// Check parameters.
+		if (facultyId == null) {
+			return JsonUtil.parameterMissingResponse("facultyId");
+		}
+		
+		List<StudentBookingGroup> studentBookingGroupList = roomBookingService.getStudentBookingList(facultyId, fromIndex);
+		if (studentBookingGroupList == null) {
+			return JsonUtil.emptyArrayResponse();
+		}
+		
+		return JsonUtil.objectToJsonString(studentBookingGroupList);
 	}
 	
 }

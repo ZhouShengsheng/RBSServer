@@ -67,4 +67,12 @@
   			and facultyId = #{facultyId,jdbcType=VARCHAR};
   </delete>
   
+  <!-- Search supervisor list. -->
+  <select id="selectSupervisorListWithCondition" resultMap="FacultyResultMap">
+  	select *
+  		from Faculty
+  		where name like #{condition,jdbcType=VARCHAR}
+  		limit #{fromIndex,jdbcType=INTEGER}, 20;
+  </select>
+  
 </mapper>

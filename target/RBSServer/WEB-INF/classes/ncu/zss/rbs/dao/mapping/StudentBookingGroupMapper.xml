@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="ncu.zss.rbs.dao.StudentBookingGroupMapper" >
+  <resultMap id="BaseResultMap" type="ncu.zss.rbs.model.StudentBookingGroup" >
+    <result column="groupId" property="groupid" jdbcType="CHAR" />
+    <result column="roomBuilding" property="roombuilding" jdbcType="VARCHAR" />
+    <result column="roomNumber" property="roomnumber" jdbcType="VARCHAR" />
+    <result column="timeIntervals" property="timeintervals" jdbcType="VARCHAR" />
+    <result column="bookReason" property="bookreason" jdbcType="VARCHAR" />
+    <result column="adminId" property="adminid" jdbcType="VARCHAR" />
+    <result column="facultyId" property="facultyid" jdbcType="VARCHAR" />
+    <result column="declineReason" property="declinereason" jdbcType="VARCHAR" />
+    <result column="creationTime" property="creationtime" jdbcType="TIMESTAMP" />
+    <result column="studentId" property="studentid" jdbcType="VARCHAR" />
+    <result column="studentName" property="studentname" jdbcType="VARCHAR" />
+    <result column="studentClassName" property="studentclassname" jdbcType="VARCHAR" />
+    <result column="studentGender" property="studentgender" jdbcType="BIT" />
+    <result column="studentDormRoomNumber" property="studentdormroomnumber" jdbcType="VARCHAR" />
+    <result column="studentPhone" property="studentphone" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <select id="selectWithFacultyId" resultMap="BaseResultMap">
+  	select RB.groupId, RB.roomBuilding, RB.roomNumber, RB.timeIntervals, RB.bookReason,
+			RB.adminId, RB.facultyId, RB.declineReason, creationTime, 
+	        S.id as studentId, S.`name` as studentName, S.className as studentClassName,
+	        S.gender as studentGender, S.dormRoomNumber as studentDormRoomNumber,
+	        S.phone as studentPhone
+		from (select *
+				from View_RoomBookingGroup
+				where facultyId = #{facultyId,jdbcType=VARCHAR}
+					and `status` = 'created'
+					and expired = 0
+				limit #{fromIndex,jdbcType=INTEGER}, 20) as RB
+		join Student as S
+		on RB.applicantId = S.id;
+  </select>
+  
+</mapper>

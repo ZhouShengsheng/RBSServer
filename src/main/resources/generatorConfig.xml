@@ -36,7 +36,7 @@
 			<property name="enableSubPackages" value="true" />
 		</javaClientGenerator>
 	
-		<!-- Tables -->
+		<!-- Tables 
 		<table tableName="Admin" domainObjectName="Admin"
 			enableCountByExample="false" enableUpdateByExample="false"
 			enableDeleteByExample="false" enableSelectByExample="false"
@@ -82,6 +82,16 @@
 			enableDeleteByExample="false" enableSelectByExample="false"
 			selectByExampleQueryId="false" />
 		
+		<table tableName="View_RoomBookingInfo" domainObjectName="RoomBookingInfo"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false" />
+			
+		<table tableName="View_StudentBookingGroup" domainObjectName="StudentBookingGroup"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false" /> -->
+			
 		<table tableName="View_RoomBookingInfo" domainObjectName="RoomBookingInfo"
 			enableCountByExample="false" enableUpdateByExample="false"
 			enableDeleteByExample="false" enableSelectByExample="false"

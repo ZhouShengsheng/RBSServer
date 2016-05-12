@@ -3,6 +3,14 @@ package ncu.zss.rbs.model;
 import java.util.Date;
 
 public class RoomBookingInfo {
+    private String building;
+
+    private String number;
+
+    private Short capacity;
+
+    private Boolean hasmultimedia;
+
     private String groupid;
 
     private String roombuilding;
@@ -29,15 +37,15 @@ public class RoomBookingInfo {
 
     private Date creationtime;
 
-    private String adminname;
+    private String studentname;
 
-    private String admindesignation;
+    private String studentclassname;
 
-    private Boolean admingender;
+    private Boolean studentgender;
 
-    private String adminoffice;
+    private String studentdormroomnumber;
 
-    private String adminphone;
+    private String studentphone;
 
     private String facultyname;
 
@@ -48,6 +56,48 @@ public class RoomBookingInfo {
     private String facultyoffice;
 
     private String facultyphone;
+
+    private String adminname;
+
+    private String admindesignation;
+
+    private Boolean admingender;
+
+    private String adminoffice;
+
+    private String adminphone;
+
+    public String getBuilding() {
+        return building;
+    }
+
+    public void setBuilding(String building) {
+        this.building = building == null ? null : building.trim();
+    }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number == null ? null : number.trim();
+    }
+
+    public Short getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(Short capacity) {
+        this.capacity = capacity;
+    }
+
+    public Boolean getHasmultimedia() {
+        return hasmultimedia;
+    }
+
+    public void setHasmultimedia(Boolean hasmultimedia) {
+        this.hasmultimedia = hasmultimedia;
+    }
 
     public String getGroupid() {
         return groupid;
@@ -153,44 +203,44 @@ public class RoomBookingInfo {
         this.creationtime = creationtime;
     }
 
-    public String getAdminname() {
-        return adminname;
+    public String getStudentname() {
+        return studentname;
     }
 
-    public void setAdminname(String adminname) {
-        this.adminname = adminname == null ? null : adminname.trim();
+    public void setStudentname(String studentname) {
+        this.studentname = studentname == null ? null : studentname.trim();
     }
 
-    public String getAdmindesignation() {
-        return admindesignation;
+    public String getStudentclassname() {
+        return studentclassname;
     }
 
-    public void setAdmindesignation(String admindesignation) {
-        this.admindesignation = admindesignation == null ? null : admindesignation.trim();
+    public void setStudentclassname(String studentclassname) {
+        this.studentclassname = studentclassname == null ? null : studentclassname.trim();
     }
 
-    public Boolean getAdmingender() {
-        return admingender;
+    public Boolean getStudentgender() {
+        return studentgender;
     }
 
-    public void setAdmingender(Boolean admingender) {
-        this.admingender = admingender;
+    public void setStudentgender(Boolean studentgender) {
+        this.studentgender = studentgender;
     }
 
-    public String getAdminoffice() {
-        return adminoffice;
+    public String getStudentdormroomnumber() {
+        return studentdormroomnumber;
     }
 
-    public void setAdminoffice(String adminoffice) {
-        this.adminoffice = adminoffice == null ? null : adminoffice.trim();
+    public void setStudentdormroomnumber(String studentdormroomnumber) {
+        this.studentdormroomnumber = studentdormroomnumber == null ? null : studentdormroomnumber.trim();
     }
 
-    public String getAdminphone() {
-        return adminphone;
+    public String getStudentphone() {
+        return studentphone;
     }
 
-    public void setAdminphone(String adminphone) {
-        this.adminphone = adminphone == null ? null : adminphone.trim();
+    public void setStudentphone(String studentphone) {
+        this.studentphone = studentphone == null ? null : studentphone.trim();
     }
 
     public String getFacultyname() {
@@ -231,5 +281,45 @@ public class RoomBookingInfo {
 
     public void setFacultyphone(String facultyphone) {
         this.facultyphone = facultyphone == null ? null : facultyphone.trim();
+    }
+
+    public String getAdminname() {
+        return adminname;
+    }
+
+    public void setAdminname(String adminname) {
+        this.adminname = adminname == null ? null : adminname.trim();
+    }
+
+    public String getAdmindesignation() {
+        return admindesignation;
+    }
+
+    public void setAdmindesignation(String admindesignation) {
+        this.admindesignation = admindesignation == null ? null : admindesignation.trim();
+    }
+
+    public Boolean getAdmingender() {
+        return admingender;
+    }
+
+    public void setAdmingender(Boolean admingender) {
+        this.admingender = admingender;
+    }
+
+    public String getAdminoffice() {
+        return adminoffice;
+    }
+
+    public void setAdminoffice(String adminoffice) {
+        this.adminoffice = adminoffice == null ? null : adminoffice.trim();
+    }
+
+    public String getAdminphone() {
+        return adminphone;
+    }
+
+    public void setAdminphone(String adminphone) {
+        this.adminphone = adminphone == null ? null : adminphone.trim();
     }
 }

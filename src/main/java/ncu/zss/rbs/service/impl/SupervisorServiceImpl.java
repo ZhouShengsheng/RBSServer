@@ -45,4 +45,9 @@ public class SupervisorServiceImpl implements SupervisorService {
 		supervisorMapper.deleteSupervisor(studentId, facultyId);
 	}
 
+	@Override
+	public List<Faculty> searchSupervisor(String condition, Integer fromIndex) {
+		return supervisorMapper.selectSupervisorListWithCondition(String.format("%%%s%%", condition), fromIndex);
+	}
+
 }

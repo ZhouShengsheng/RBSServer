@@ -59,4 +59,13 @@ public interface SupervisorService {
 	 */
 	void deleteSupervisor(String studentId, String facultyId);
 	
+	/**
+	 * Search supervisor.
+	 * 
+	 * @param condition
+	 * @param fromIndex
+	 * @return
+	 */
+	List<Faculty> searchSupervisor(String condition, Integer fromIndex);
+	
 }

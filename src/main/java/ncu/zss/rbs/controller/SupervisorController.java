@@ -158,4 +158,19 @@ public class SupervisorController {
 		return JsonUtil.simpleMessageResponse("No.");
 	}
 	
+	@ResponseBody
+	@RequestMapping(value = "/search", method = RequestMethod.POST)
+	public String searchSupervisor(String condition, @RequestParam(value = "fromIndex", defaultValue = "0") Integer fromIndex) {
+		if (condition == null) {
+			return JsonUtil.parameterMissingResponse("condition");
+		}
+		
+		List<Faculty> supervisorList = supervisorService.searchSupervisor(condition, fromIndex);
+		if (supervisorList == null || supervisorList.isEmpty()) {
+			return JsonUtil.emptyArrayResponse();
+		}
+		
+		return JsonUtil.objectToJsonString(supervisorList);
+	}
+	
 }

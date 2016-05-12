@@ -8,6 +8,7 @@
 /Users/jackjones/Workspaces/eclipse/RBSServer/src/main/java/ncu/zss/rbs/controller/UserController.java
 /Users/jackjones/Workspaces/eclipse/RBSServer/src/main/java/ncu/zss/rbs/dao/AdminMapper.java
 /Users/jackjones/Workspaces/eclipse/RBSServer/src/main/java/ncu/zss/rbs/controller/SupervisorController.java
+/Users/jackjones/Workspaces/eclipse/RBSServer/src/main/java/ncu/zss/rbs/dao/StudentBookingGroupMapper.java
 /Users/jackjones/Workspaces/eclipse/RBSServer/src/main/java/ncu/zss/rbs/mq/MQService.java
 /Users/jackjones/Workspaces/eclipse/RBSServer/src/main/java/ncu/zss/rbs/controller/RoomController.java
 /Users/jackjones/Workspaces/eclipse/RBSServer/src/main/java/ncu/zss/rbs/dao/RoomMapper.java
@@ -35,6 +36,7 @@
 /Users/jackjones/Workspaces/eclipse/RBSServer/src/main/java/ncu/zss/rbs/dao/StudentMapper.java
 /Users/jackjones/Workspaces/eclipse/RBSServer/src/main/java/ncu/zss/rbs/dao/FacultyMapper.java
 /Users/jackjones/Workspaces/eclipse/RBSServer/src/main/java/ncu/zss/rbs/dao/FavoriteRoomMapper.java
+/Users/jackjones/Workspaces/eclipse/RBSServer/src/main/java/ncu/zss/rbs/model/StudentBookingGroup.java
 /Users/jackjones/Workspaces/eclipse/RBSServer/src/main/java/ncu/zss/rbs/dao/ClassMapper.java
 /Users/jackjones/Workspaces/eclipse/RBSServer/src/main/java/ncu/zss/rbs/db/manager/RedisManager.java
 /Users/jackjones/Workspaces/eclipse/RBSServer/src/main/java/ncu/zss/rbs/util/JsonUtil.java

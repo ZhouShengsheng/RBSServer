@@ -9,6 +9,9 @@ desc StudentFacultyMapping;
 select concat('rbs_', id) from Faculty;
 update Faculty set password=sha1(concat('rbs_', id));
 update Student set password=sha1(concat('rbs_', id));
+update Faculty
+	set `name` = '教室管理员'
+    where id = '10001';
 
 -- Login.
 select * from rbs.Student;
@@ -178,7 +181,8 @@ select RB.groupId, RB.roomBuilding, RB.roomNumber, RB.timeIntervals, RB.bookReas
 	on RB.applicantId = S.id;
 
 select *
-	from View_RoomBookingGroup;
+	from View_RoomBookingGroup
+	where groupId = '639a1401-e0a7-42ce-a512-bbf8a771187d';
 
 desc RoomBooking;
 
@@ -186,3 +190,9 @@ select * from View_StudentBookingGroup;
 
 update RoomBooking
 	set bookReason = '测试';
+
+select * from RoomBooking;
+
+update RoomBooking
+	set `status` = 'admin_approved'
+    where id in (34, 35, 36);

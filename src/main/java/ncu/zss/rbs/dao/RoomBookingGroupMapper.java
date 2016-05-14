@@ -52,4 +52,20 @@ public interface RoomBookingGroupMapper {
 			@Param("applicantId") String applicantId,
 			@Param("fromIndex") Integer fromIndex);
 	
+	/**
+	 * Select admin processing list.
+	 * 
+	 * @param fromIndex
+	 * @return
+	 */
+	List<RoomBookingGroup> selectAdminProcessingList(Integer fromIndex);
+	
+	/**
+	 * Select admin processed list.
+	 * 
+	 * @param fromIndex
+	 * @return
+	 */
+	List<RoomBookingGroup> selectAdminProcessedList(Integer fromIndex);
+	
 }

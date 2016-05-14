@@ -62,4 +62,34 @@
   		where groupId = #{groupId,jdbcType=VARCHAR};
   </update>
   
+  <!-- Supervisor approve the booking group. -->
+  <update id="updateToSupervisorApprove">
+  	update RoomBooking
+  		set `status` = 'faculty_approved'
+  		where groupId = #{groupId,jdbcType=VARCHAR};
+  </update>
+  
+  <!-- Supervisor decline the booking group. -->
+  <update id="updateToSupervisorDecline">
+  	update RoomBooking
+  		set `status` = 'faculty_declined',
+  			declineReason = #{declineReason,jdbcType=VARCHAR}
+  		where groupId = #{groupId,jdbcType=VARCHAR};
+  </update>
+  
+  <!-- Admin approve the booking group. -->
+  <update id="updateToAdminApprove">
+  	update RoomBooking
+  		set `status` = 'admin_approved'
+  		where groupId = #{groupId,jdbcType=VARCHAR};
+  </update>
+  
+  <!-- Admin decline the booking group. -->
+  <update id="updateToAdminDecline">
+  	update RoomBooking
+  		set `status` = 'admin_declined',
+  			declineReason = #{declineReason,jdbcType=VARCHAR}
+  		where groupId = #{groupId,jdbcType=VARCHAR};
+  </update>
+  
 </mapper>

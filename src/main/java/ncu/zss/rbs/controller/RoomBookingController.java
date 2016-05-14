@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import ncu.zss.rbs.db.manager.RedisManager;
 import ncu.zss.rbs.model.RoomBooking;
 import ncu.zss.rbs.model.RoomBookingGroup;
 import ncu.zss.rbs.model.RoomBookingInfo;
@@ -286,6 +287,38 @@ public class RoomBookingController {
 	}
 	
 	@ResponseBody
+	@RequestMapping(value = "/admin_processing_list", method = RequestMethod.POST)
+	public String getAdminProcessingList(String idDigest, @RequestParam(value = "fromIndex", defaultValue = "0") Integer fromIndex) {
+		// Check is admin.
+		if (!userService.isAdmin(idDigest)) {
+			return JsonUtil.simpleMessageResponse("You do not have the privilege.");
+		}
+		
+		List<RoomBookingGroup> roomBookingGroupList = roomBookingService.getAdminProcessingList(fromIndex);
+		if (roomBookingGroupList == null) {
+			return JsonUtil.emptyArrayResponse();
+		}
+		
+		return JsonUtil.objectToJsonString(roomBookingGroupList);
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/admin_processed_list", method = RequestMethod.POST)
+	public String getAdminProccessedList(String idDigest, @RequestParam(value = "fromIndex", defaultValue = "0") Integer fromIndex) {
+		// Check is admin.
+		if (!userService.isAdmin(idDigest)) {
+			return JsonUtil.simpleMessageResponse("You do not have the privilege.");
+		}
+		
+		List<RoomBookingGroup> roomBookingGroupList = roomBookingService.getAdminProcessedList(fromIndex);
+		if (roomBookingGroupList == null) {
+			return JsonUtil.emptyArrayResponse();
+		}
+		
+		return JsonUtil.objectToJsonString(roomBookingGroupList);
+	}
+	
+	@ResponseBody
 	@RequestMapping(value = "/student_booking_list", method = RequestMethod.POST)
 	public String getStudentBookingyList(String facultyId, @RequestParam(value = "fromIndex", defaultValue = "0") Integer fromIndex) {
 		// Check parameters.
@@ -299,6 +332,77 @@ public class RoomBookingController {
 		}
 		
 		return JsonUtil.objectToJsonString(studentBookingGroupList);
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/approve", method = RequestMethod.POST)
+	public String approveRoomBooking(String personType, String personId, String groupId) {
+		// Check parameters.
+		if (personType == null) {
+			return JsonUtil.parameterMissingResponse("personType");
+		}
+		if (personId == null) {
+			return JsonUtil.parameterMissingResponse("personId");
+		}
+		
+		// Check group id.
+		RoomBookingInfo roomBookingInfo = roomBookingService.getRoomBookingInfo(groupId);
+		if (roomBookingInfo == null) {
+			return JsonUtil.simpleMessageResponse("Group not found.");
+		}
+		
+		switch (personType) {
+			case "admin": {
+				if (!personId.equals(roomBookingInfo.getAdminid())) {
+					return JsonUtil.simpleMessageResponse("You do not have the privilege.");
+				}
+				roomBookingService.adminApprove(groupId);
+				// Flush room list redis db.
+				RedisManager.flushDB(RedisManager.DB_ROOM_LIST);
+				return JsonUtil.simpleMessageResponse("Approved.");
+			}
+			case "faculty": {
+				if (!personId.equals(roomBookingInfo.getFacultyid())) {
+					return JsonUtil.simpleMessageResponse("You do not have the privilege.");
+				}
+				roomBookingService.supervisorApprove(groupId);
+				return JsonUtil.simpleMessageResponse("Approved.");
+			}
+			default: {
+				return JsonUtil.simpleMessageResponse("Person type incorrect.");
+			}
+		}
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/decline", method = RequestMethod.POST)
+	public String declineRoomBooking(String personType, String personId, String groupId, String declineReason) {
+		// Check parameters.
+		if (personType == null) {
+			return JsonUtil.parameterMissingResponse("personType");
+		}
+		if (personId == null) {
+			return JsonUtil.parameterMissingResponse("personId");
+		}
+		if (groupId == null) {
+			return JsonUtil.parameterMissingResponse("groupId");
+		}
+		if (declineReason == null) {
+			return JsonUtil.parameterMissingResponse("declineReason");
+		}
+		switch (personType) {
+			case "admin": {
+				roomBookingService.adminDecline(groupId, declineReason);
+				return JsonUtil.simpleMessageResponse("Declined.");
+			}
+			case "faculty": {
+				roomBookingService.supervisorDecline(groupId, declineReason);
+				return JsonUtil.simpleMessageResponse("Declined.");
+			}
+			default: {
+				return JsonUtil.simpleMessageResponse("Person type incorrect.");
+			}
+		}
 	}
 	
 }

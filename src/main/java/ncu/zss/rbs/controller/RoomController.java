@@ -342,7 +342,7 @@ public class RoomController {
 		
 		// Check is admin.
 		if (!userService.isAdmin(idDigest)) {
-			return JsonUtil.simpleMessageResponse("You do not have the privileges.");
+			return JsonUtil.simpleMessageResponse("You do not have the privilege.");
 		}
 		
 		// Check if room exists.
@@ -375,7 +375,7 @@ public class RoomController {
 		
 		// Check is admin.
 		if (!userService.isAdmin(idDigest)) {
-			return JsonUtil.simpleMessageResponse("You do not have the privileges.");
+			return JsonUtil.simpleMessageResponse("You do not have the privilege.");
 		}
 		
 		// Check if room exists.
@@ -419,7 +419,7 @@ public class RoomController {
 		
 		// Check if the user performing the action is the user logged in.
 		if (!userService.isSameUserLoggedIn(id, idDigest)) {
-			return JsonUtil.simpleMessageResponse("You do not have the privileges.");
+			return JsonUtil.simpleMessageResponse("You do not have the privilege.");
 		}
 		
 		// Check if the user has already set favorite for this room.

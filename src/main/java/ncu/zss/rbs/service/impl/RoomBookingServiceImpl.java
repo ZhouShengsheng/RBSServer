@@ -101,4 +101,34 @@ public class RoomBookingServiceImpl implements RoomBookingService {
 		return studentBookingGroupMapper.selectWithFacultyId(facultyId, fromIndex);
 	}
 	
+	@Override
+	public List<RoomBookingGroup> getAdminProcessingList(Integer fromIndex) {
+		return roomBookingGroupMapper.selectAdminProcessingList(fromIndex);
+	}
+
+	@Override
+	public List<RoomBookingGroup> getAdminProcessedList(Integer fromIndex) {
+		return roomBookingGroupMapper.selectAdminProcessedList(fromIndex);
+	}
+
+	@Override
+	public void supervisorApprove(String groupId) {
+		roomBookingMapper.updateToSupervisorApprove(groupId);
+	}
+
+	@Override
+	public void supervisorDecline(String groupId, String declineReason) {
+		roomBookingMapper.updateToSupervisorDecline(groupId, declineReason);
+	}
+
+	@Override
+	public void adminApprove(String groupId) {
+		roomBookingMapper.updateToAdminApprove(groupId);
+	}
+
+	@Override
+	public void adminDecline(String groupId, String declineReason) {
+		roomBookingMapper.updateToAdminDecline(groupId, declineReason);
+	}
+	
 }

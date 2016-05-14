@@ -107,4 +107,50 @@ public interface RoomBookingService {
 	 */
 	List<StudentBookingGroup> getStudentBookingList(String facultyId, Integer fromIndex);
 	
+	/**
+	 * Get admin processing list.
+	 * 
+	 * @param fromIndex
+	 * @return
+	 */
+	List<RoomBookingGroup> getAdminProcessingList(Integer fromIndex);
+	
+	/**
+	 * Get admin processed list.
+	 * 
+	 * @param fromIndex
+	 * @return
+	 */
+	List<RoomBookingGroup> getAdminProcessedList(Integer fromIndex);
+	
+	/**
+	 * Supervisor approve the booking group.
+	 * 
+	 * @param groupId
+	 */
+	void supervisorApprove(String groupId);
+	
+	/**
+	 * Supervisor decline the booking group.
+	 * 
+	 * @param groupId
+	 * @param declineReason
+	 */
+	void supervisorDecline(String groupId, String declineReason);
+	
+	/**
+	 * Admin approve the booking group.
+	 * 
+	 * @param groupId
+	 */
+	void adminApprove(String groupId);
+	
+	/**
+	 * Admin decline the booking group.
+	 * 
+	 * @param groupId
+	 * @param declineReason
+	 */
+	void adminDecline(String groupId, String declineReason);
+	
 }

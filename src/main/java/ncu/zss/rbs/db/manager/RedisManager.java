@@ -1,11 +1,15 @@
 package ncu.zss.rbs.db.manager;
 
+import org.apache.log4j.Logger;
+
 import ncu.zss.rbs.util.PropertiesManager;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
 public class RedisManager {
+	
+	private static Logger logger = Logger.getLogger(RedisManager.class);
 	
 	private static final String redisPropertiesFile = "redis.properties";
 	
@@ -175,12 +179,18 @@ public class RedisManager {
 		}
 	}
 	
+	/**
+	 * Flush db.
+	 * 
+	 * @param db
+	 */
 	public static void flushDB(int db) {
 		Jedis jedis = null;
 		try {
 			jedis = getInstance().getJedis();
 			jedis.select(db);
 			jedis.flushDB();
+			logger.warn(String.format("DB %d flushed.", db));
 		}catch (Exception e) {
 			e.printStackTrace();
 		}finally {

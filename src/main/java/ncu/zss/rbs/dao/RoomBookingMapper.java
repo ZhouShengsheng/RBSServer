@@ -59,4 +59,31 @@ public interface RoomBookingMapper {
 	 */
 	void updateToCancelBooking(String groupId);
 	
+	/**
+	 * Supervisor approve the booking group.
+	 * 
+	 * @param groupId
+	 */
+	void updateToSupervisorApprove(String groupId);
+	
+	/**
+	 * Supervisor decline the booking group.
+	 * 
+	 * @param groupId
+	 */
+	void updateToSupervisorDecline(@Param("groupId") String groupId, @Param("declineReason") String declineReason);
+	
+	/**
+	 * Admin approve the booking group.
+	 * 
+	 * @param groupId
+	 */
+	void updateToAdminApprove(String groupId);
+	
+	/**
+	 * Admin decline the booking group.
+	 * 
+	 * @param groupId
+	 */
+	void updateToAdminDecline(@Param("groupId") String groupId, @Param("declineReason") String declineReason);
 }

@@ -35,4 +35,11 @@
   		on A.id = F.id;
   </select>
   
+  <!-- Select admin by id digest. -->
+  <select id="selectDefaultAdminId" parameterType="java.lang.String" resultType="java.lang.String">
+  	select id
+  		from Admin
+  		limit 0, 1;
+  </select>
+  
 </mapper>

@@ -51,7 +51,7 @@ public class RoomBookingServiceImpl implements RoomBookingService {
 	}
 
 	@Override
-	public void bookRoom(String roomBuilding, String roomNumber, String applicantType, String applicantId,
+	public String bookRoom(String roomBuilding, String roomNumber, String applicantType, String applicantId,
 			ArrayList<ArrayList<Date>> timeIntervalList, String bookReason, String facultyId) {
 		String groupId = UUID.randomUUID().toString();
 		String status = applicantType.equals("student") ? "created" : "faculty_approved";
@@ -64,6 +64,8 @@ public class RoomBookingServiceImpl implements RoomBookingService {
 					applicantType, applicantId, 
 					timeInterval.get(0), timeInterval.get(1), bookReason, status, facultyId);
 		}
+		
+		return groupId;
 	}
 
 	@Override

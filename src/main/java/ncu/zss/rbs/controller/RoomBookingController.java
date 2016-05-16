@@ -17,11 +17,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import ncu.zss.rbs.db.manager.RedisManager;
+import ncu.zss.rbs.model.Faculty;
 import ncu.zss.rbs.model.RoomBooking;
 import ncu.zss.rbs.model.RoomBookingGroup;
 import ncu.zss.rbs.model.RoomBookingInfo;
+import ncu.zss.rbs.model.Student;
 import ncu.zss.rbs.model.StudentBookingGroup;
 import ncu.zss.rbs.service.FavoriteRoomService;
+import ncu.zss.rbs.service.PushNotificationService;
 import ncu.zss.rbs.service.RoomBookingService;
 import ncu.zss.rbs.service.RoomService;
 import ncu.zss.rbs.service.SupervisorService;
@@ -60,6 +63,10 @@ public class RoomBookingController {
 	@Qualifier("roomBookingServiceImpl")
 	RoomBookingService roomBookingService;
 	
+	@Autowired
+	@Qualifier("pushNotificationServiceImpl")
+	PushNotificationService pushNotificationService;
+	
 	/**
 	 * Book room.
 	 * 
@@ -71,11 +78,12 @@ public class RoomBookingController {
 	 * @param bookReason
 	 * @param facultyId
 	 * @return
+	 * @throws Exception 
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/book", method = RequestMethod.POST)
 	public String bookRoom(String roomBuilding, String roomNumber, String applicantType, String applicantId,
-			String timeIntervals, String bookReason, String facultyId) {
+			String timeIntervals, String bookReason, String facultyId) throws Exception {
 		logger.info("timeIntervals: " + timeIntervals);
 		// Check parameters.
 		if (roomBuilding == null) {
@@ -94,6 +102,8 @@ public class RoomBookingController {
 			return JsonUtil.parameterMissingResponse("timeIntervals");
 		}
 		
+		String pushUserType;
+		
 		if (applicantType.equals("student")) {
 			if (facultyId == null) {
 				return JsonUtil.parameterMissingResponse("facultyId");
@@ -104,6 +114,9 @@ public class RoomBookingController {
 					return JsonUtil.simpleMessageResponse("Faculty is not your supervisor.");
 				}
 			}
+			pushUserType = "faculty";
+		} else {
+			pushUserType = "admin";
 		}
 		
 		// Get time intervals.
@@ -123,7 +136,20 @@ public class RoomBookingController {
 		}
 		
 		// Book room.
-		roomBookingService.bookRoom(roomBuilding, roomNumber, applicantType, applicantId, timeIntervalList, bookReason, facultyId);
+		String groupId = roomBookingService.bookRoom(roomBuilding, roomNumber, applicantType, applicantId, timeIntervalList, bookReason, facultyId);
+		
+		// Send push notification.
+		if (pushUserType.equals("faculty")) {
+			Student student = userService.getStudentById(applicantId);
+			String apnToken = pushNotificationService.getAPNToken(pushUserType, facultyId);
+			String message = String.format("教室申请通知！教室: %s%s, 申请人: %s。", roomBuilding, roomNumber, student.toString());
+			pushNotificationService.sendPushNotification(apnToken, message, "roomBooking", groupId, "created");
+		} else {
+			Faculty faculty = userService.getFacultyById(applicantId);
+			String apnToken = pushNotificationService.getAPNToken(pushUserType, userService.getDefaultAdminId());
+			String message = String.format("教室申请通知！教室: %s%s, 申请人: %s。", roomBuilding, roomNumber, faculty.toString());
+			pushNotificationService.sendPushNotification(apnToken, message, "roomBooking", groupId, "faculty_approved");
+		}
 		
 		return JsonUtil.simpleMessageResponse("Successfully booked.");
 	}
@@ -240,21 +266,36 @@ public class RoomBookingController {
 	 * @param applicantId
 	 * @param fromIndex
 	 * @return
+	 * @throws Exception 
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/cancel", method = RequestMethod.POST)
-	public String cancelBooking(String groupId) {
+	public String cancelBooking(String groupId) throws Exception {
 		// Check parameters.
 		if (groupId == null) {
 			return JsonUtil.parameterMissingResponse("groupId");
 		}
 		
-		RoomBookingInfo info = roomBookingService.getRoomBookingInfo(groupId);
-		if (info == null) {
+		RoomBookingInfo roomBookingInfo = roomBookingService.getRoomBookingInfo(groupId);
+		if (roomBookingInfo == null) {
 			return JsonUtil.simpleMessageResponse("Group not found.");
 		}
 		
+		// Cancel.
 		roomBookingService.cancelBooking(groupId);
+		
+		String status = roomBookingInfo.getStatus();
+		if (status.equals("created")) {
+			// Send push notification to supervisor.
+			String apnToken = pushNotificationService.getAPNToken("faculty", roomBookingInfo.getFacultyid());
+			String message = String.format("学生申请已取消！申请编号: %s。", groupId);
+			pushNotificationService.sendPushNotification(apnToken, message, "roomBooking", groupId, "canceled");
+		} else {
+			// Send push notification to admin.
+			String apnToken = pushNotificationService.getAPNToken("admin", userService.getDefaultAdminId());
+			String message = String.format("申请已取消！申请编号: %s。", groupId);
+			pushNotificationService.sendPushNotification(apnToken, message, "roomBooking", groupId, "canceled");
+		}
 		
 		return JsonUtil.simpleMessageResponse("Successfully canceled booking.");
 	}
@@ -336,7 +377,7 @@ public class RoomBookingController {
 	
 	@ResponseBody
 	@RequestMapping(value = "/approve", method = RequestMethod.POST)
-	public String approveRoomBooking(String personType, String personId, String groupId) {
+	public String approveRoomBooking(String personType, String personId, String groupId) throws Exception {
 		// Check parameters.
 		if (personType == null) {
 			return JsonUtil.parameterMissingResponse("personType");
@@ -359,6 +400,14 @@ public class RoomBookingController {
 				roomBookingService.adminApprove(groupId);
 				// Flush room list redis db.
 				RedisManager.flushDB(RedisManager.DB_ROOM_LIST);
+				
+				// Send push notification.
+				String applicantType = roomBookingInfo.getApplicanttype();
+				String applicantId = roomBookingInfo.getApplicantid();
+				String apnToken = pushNotificationService.getAPNToken(applicantType, applicantId);
+				String message = String.format("您的教室申请已通过审核！申请编号: %s。", groupId);
+				pushNotificationService.sendPushNotification(apnToken, message, "roomBooking", groupId, "admin_approved");
+				
 				return JsonUtil.simpleMessageResponse("Approved.");
 			}
 			case "faculty": {
@@ -366,6 +415,21 @@ public class RoomBookingController {
 					return JsonUtil.simpleMessageResponse("You do not have the privilege.");
 				}
 				roomBookingService.supervisorApprove(groupId);
+				
+				// Send push notification to applicant.
+				String applicantType = roomBookingInfo.getApplicanttype();
+				String applicantId = roomBookingInfo.getApplicantid();
+				String apnToken = pushNotificationService.getAPNToken(applicantType, applicantId);
+				String message = String.format("您的教室申请已通过上级审核！申请编号: %s。", groupId);
+				pushNotificationService.sendPushNotification(apnToken, message, "roomBooking", groupId, "faculty_approved");
+				
+				// Send push notification to admin.
+				Student student = userService.getStudentById(applicantId);
+				apnToken = pushNotificationService.getAPNToken("admin", userService.getDefaultAdminId());
+				message = String.format("教室申请通知！教室: %s%s, 申请人: %s。", 
+						roomBookingInfo.getRoombuilding(), roomBookingInfo.getRoomnumber(), student.toString());
+				pushNotificationService.sendPushNotification(apnToken, message, "roomBooking", groupId, "faculty_approved");
+				
 				return JsonUtil.simpleMessageResponse("Approved.");
 			}
 			default: {
@@ -376,7 +440,7 @@ public class RoomBookingController {
 	
 	@ResponseBody
 	@RequestMapping(value = "/decline", method = RequestMethod.POST)
-	public String declineRoomBooking(String personType, String personId, String groupId, String declineReason) {
+	public String declineRoomBooking(String personType, String personId, String groupId, String declineReason) throws Exception {
 		// Check parameters.
 		if (personType == null) {
 			return JsonUtil.parameterMissingResponse("personType");
@@ -390,13 +454,32 @@ public class RoomBookingController {
 		if (declineReason == null) {
 			return JsonUtil.parameterMissingResponse("declineReason");
 		}
+		
+		// Check group id.
+		RoomBookingInfo roomBookingInfo = roomBookingService.getRoomBookingInfo(groupId);
+		if (roomBookingInfo == null) {
+			return JsonUtil.simpleMessageResponse("Group not found.");
+		}
+		
 		switch (personType) {
 			case "admin": {
 				roomBookingService.adminDecline(groupId, declineReason);
+				
+				// Send push notification.
+				String apnToken = pushNotificationService.getAPNToken(roomBookingInfo.getApplicanttype(), roomBookingInfo.getApplicantid());
+				String message = String.format("nin的教室申请已被管理员拒绝！申请编号: %s。", groupId);
+				pushNotificationService.sendPushNotification(apnToken, message, "roomBooking", groupId, "admin_declined");
+				
 				return JsonUtil.simpleMessageResponse("Declined.");
 			}
 			case "faculty": {
 				roomBookingService.supervisorDecline(groupId, declineReason);
+				
+				// Send push notification.
+				String apnToken = pushNotificationService.getAPNToken(roomBookingInfo.getApplicanttype(), roomBookingInfo.getApplicantid());
+				String message = String.format("您的教室申请已被上级拒绝！申请编号: %s。", groupId);
+				pushNotificationService.sendPushNotification(apnToken, message, "roomBooking", groupId, "faculty_declined");
+				
 				return JsonUtil.simpleMessageResponse("Declined.");
 			}
 			default: {

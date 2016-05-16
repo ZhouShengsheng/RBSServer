@@ -50,7 +50,7 @@ public class PushNotificationServiceImpl implements PushNotificationService {
 		mqData.put("apnToken", apnToken);
 		mqData.put("pushData", pushData);
 		
-		mqService.send("push_notification_queue", "push.room_booking", mqData.toJSONString());
+		mqService.send("push_notification_exchange", "push.room_booking", mqData.toJSONString());
 	}
 
 }

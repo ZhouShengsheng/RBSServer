@@ -80,4 +80,8 @@ public class Faculty {
     public void setPhone(String phone) {
         this.phone = phone == null ? null : phone.trim();
     }
+    
+    public String toString() {
+		return String.format("%s %s %s", id, name, designation);
+    }
 }

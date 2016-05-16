@@ -94,23 +94,26 @@ public class UserController {
 			}
 			
 			case "student": {
+				logger.info("1");
 				Student student = userService.getStudentById(id);
+				logger.info("2");
 				if (student == null) {
 					return JsonUtil.simpleMessageResponse("User not found.");
 				}
 				if (!student.getPassword().equals(password)) {
 					return JsonUtil.simpleMessageResponse("Password incorrect.");
 				}
+				logger.info("3");
 				RedisManager.storeValueInRedis(RedisManager.DB_USER, student.getIdDigest(), student.getId(), RedisManager.EXPIRE_TIME);
 				student.setPassword(null);
-				
+				logger.info("4");
 				// Get student supervisor.
 				Faculty supervisor = supervisorService.getClassSupervisor(id);
 				supervisor.setPassword(null);
-				
+				logger.info("5");
 				Map<String, Object> resultMap = JsonUtil.objectToMap(student);
 				resultMap.put("supervisor", JsonUtil.objectToMap(supervisor));
-				
+				logger.info("6");
 				return JsonUtil.objectToJsonString(resultMap);
 			}
 	

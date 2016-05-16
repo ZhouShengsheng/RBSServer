@@ -29,6 +29,11 @@ public class UserServiceImpl implements UserService {
 		String idLoggedIn = UserUtil.getUserIdByIdDigest(idDigest);
 		return (idLoggedIn != null && idLoggedIn.equals(id));
 	}
+	
+	@Override
+	public String getDefaultAdminId() {
+		return adminMapper.selectDefaultAdminId();
+	}
 
 	@Override
 	public Faculty getAdminById(String id) {

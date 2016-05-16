@@ -18,4 +18,11 @@ public interface AdminMapper {
 	 */
 	Faculty selectByIdDigest(String idDigest);
 	
+	/**
+	 * Select default admin id.
+	 * 
+	 * @return
+	 */
+	String selectDefaultAdminId();
+	
 }

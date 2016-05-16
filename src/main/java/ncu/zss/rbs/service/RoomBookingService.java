@@ -42,8 +42,10 @@ public interface RoomBookingService {
 	 * @param timeIntervalList
 	 * @param bookReason
 	 * @param facultyId
+	 * 
+	 * @return groupId
 	 */
-	void bookRoom(String roomBuilding, String roomNumber, String applicantType, String applicantId, 
+	String bookRoom(String roomBuilding, String roomNumber, String applicantType, String applicantId, 
 			ArrayList<ArrayList<Date>> timeIntervalList, String bookReason, String facultyId);
 	
 	/**

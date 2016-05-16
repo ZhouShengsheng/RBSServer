@@ -18,6 +18,13 @@ public interface UserService {
 	boolean isSameUserLoggedIn(String id, String idDigest);
 	
 	/**
+	 * Get default admin id.
+	 * 
+	 * @return
+	 */
+	String getDefaultAdminId();
+	
+	/**
 	 * Get admin by id.
 	 * 
 	 * @param

@@ -196,3 +196,25 @@ select * from RoomBooking;
 update RoomBooking
 	set `status` = 'admin_approved'
     where id in (34, 35, 36);
+
+desc PushNotification;
+
+drop table PushNotification;
+
+CREATE TABLE IF NOT EXISTS `rbs`.`PushNotification` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `userType` ENUM('admin', 'faculty', 'student') NOT NULL,
+  `userId` VARCHAR(20) NOT NULL,
+  `apnToken` VARCHAR(128) NOT NULL,
+  unique(`userType`, `userId`),
+  PRIMARY KEY (`id`));
+
+insert into PushNotification(userType, userId, apnToken)
+	values('faculty', '10003', '78b61e89b8104b54c74dae56b0144d3de217f12659d7e38743d9486130e96619');
+
+insert into PushNotification(userType, userId, apnToken)
+	values ('faculty', '10003', '78b61e89b8104b54c74dae56b0144d3de217f12659d7e38743d9486130e96619')
+	on duplicate key update
+	apnToken = values(apnToken);
+
+select * from PushNotification;

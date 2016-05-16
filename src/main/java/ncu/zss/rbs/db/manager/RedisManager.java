@@ -161,7 +161,7 @@ public class RedisManager {
 	}
 	
 	/**
-	 * del value from redis
+	 * delete value from redis
 	 * @param db
 	 * @param key
 	 * @param field

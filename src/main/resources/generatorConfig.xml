@@ -90,9 +90,14 @@
 		<table tableName="View_StudentBookingGroup" domainObjectName="StudentBookingGroup"
 			enableCountByExample="false" enableUpdateByExample="false"
 			enableDeleteByExample="false" enableSelectByExample="false"
-			selectByExampleQueryId="false" /> -->
+			selectByExampleQueryId="false" />
 			
 		<table tableName="View_RoomBookingInfo" domainObjectName="RoomBookingInfo"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false" /> -->
+		
+		<table tableName="PushNotification" domainObjectName="PushNotification"
 			enableCountByExample="false" enableUpdateByExample="false"
 			enableDeleteByExample="false" enableSelectByExample="false"
 			selectByExampleQueryId="false" />

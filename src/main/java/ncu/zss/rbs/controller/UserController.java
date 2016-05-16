@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import ncu.zss.rbs.db.manager.RedisManager;
 import ncu.zss.rbs.model.Faculty;
 import ncu.zss.rbs.model.Student;
+import ncu.zss.rbs.service.PushNotificationService;
 import ncu.zss.rbs.service.SupervisorService;
 import ncu.zss.rbs.service.UserService;
 import ncu.zss.rbs.util.JsonUtil;
@@ -36,6 +37,10 @@ public class UserController {
 	@Autowired
 	@Qualifier("supervisorServiceImpl")
 	SupervisorService supervisorService;
+	
+	@Autowired
+	@Qualifier("pushNotificationServiceImpl")
+	PushNotificationService pushNotificationService;
 	
 	/**
 	 * User login.
@@ -113,6 +118,29 @@ public class UserController {
 				return JsonUtil.simpleMessageResponse("Unknown type.");
 			}
 		}
+	}
+	
+	/**
+	 * User logout.
+	 * 
+	 * @param type One of admin, faculty and student.
+	 * @param id User id.
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/logout", method = RequestMethod.POST)
+	public String logout(String type, String id) {
+		if (type == null) {
+			return JsonUtil.parameterMissingResponse("type");
+		}
+		if (id == null) {
+			return JsonUtil.parameterMissingResponse("id");
+		}
+		
+		// Delete apn token to prevent from sending notifications.
+		pushNotificationService.deleteAPNToken(type, id);
+		
+		return JsonUtil.simpleMessageResponse("Logged out.");
 	}
 	
 	/**

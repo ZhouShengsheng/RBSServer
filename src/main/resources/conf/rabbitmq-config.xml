@@ -8,7 +8,7 @@
 
 	<!-- connection parameters -->
 	<rabbit:connection-factory id="connectionFactory"
-		host="127.0.0.1" virtual-host="rbs_vhost" username="rbs_admin"
+		host="172.31.6.38" virtual-host="rbs_vhost" username="rbs_admin"
 		password="rbs_admin" port="5672" cache-mode="CHANNEL"
 		channel-cache-size="32" connection-timeout="5000" />
 
@@ -20,7 +20,6 @@
 
 	<!-- queues -->
 	<rabbit:queue name="push_notification_queue" />
-	<rabbit:queue name="email_queue" />
 	
 	<!-- exchanges -->
 	<rabbit:topic-exchange name="push_notification_exchange">
@@ -28,13 +27,6 @@
 			<rabbit:binding queue="push_notification_queue" pattern="push.#"/>
 		</rabbit:bindings>
 	</rabbit:topic-exchange>
-	
-	<!-- exchanges -->
-	<rabbit:direct-exchange name="email_exchange">
-		<rabbit:bindings>
-			<rabbit:binding queue="email_queue" key="email_routing"/>
-		</rabbit:bindings>
-	</rabbit:direct-exchange>
 
 	<!-- listeners -->
 	<!-- <rabbit:listener-container

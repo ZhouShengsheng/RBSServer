@@ -37,5 +37,8 @@
 		</aop:aspect>
 	</aop:config>
 	<!-- 配置数据库注解aop -->
+	
+	<!-- Push notification message queue listener. -->
+	<bean class="ncu.zss.rbs.push.PushNotificationMessageQueueListener" />
 
 </beans>

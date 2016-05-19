@@ -467,7 +467,7 @@ public class RoomBookingController {
 				
 				// Send push notification.
 				String apnToken = pushNotificationService.getAPNToken(roomBookingInfo.getApplicanttype(), roomBookingInfo.getApplicantid());
-				String message = String.format("nin的教室申请已被管理员拒绝！申请编号: %s。", groupId);
+				String message = String.format("您的教室申请已被管理员拒绝！申请编号: %s。", groupId);
 				pushNotificationService.sendPushNotification(apnToken, message, "roomBooking", groupId, "admin_declined");
 				
 				return JsonUtil.simpleMessageResponse("Declined.");

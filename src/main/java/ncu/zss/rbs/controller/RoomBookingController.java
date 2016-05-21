@@ -141,14 +141,12 @@ public class RoomBookingController {
 		// Send push notification.
 		if (pushUserType.equals("faculty")) {
 			Student student = userService.getStudentById(applicantId);
-			String apnToken = pushNotificationService.getAPNToken(pushUserType, facultyId);
 			String message = String.format("教室申请通知！教室: %s%s, 申请人: %s。", roomBuilding, roomNumber, student.toString());
-			pushNotificationService.sendPushNotification(apnToken, message, "roomBooking", groupId, "created");
+			pushNotificationService.sendPushNotification(pushUserType, facultyId, message, "roomBooking", groupId, "created");
 		} else {
 			Faculty faculty = userService.getFacultyById(applicantId);
-			String apnToken = pushNotificationService.getAPNToken(pushUserType, userService.getDefaultAdminId());
 			String message = String.format("教室申请通知！教室: %s%s, 申请人: %s。", roomBuilding, roomNumber, faculty.toString());
-			pushNotificationService.sendPushNotification(apnToken, message, "roomBooking", groupId, "faculty_approved");
+			pushNotificationService.sendPushNotification(pushUserType, userService.getDefaultAdminId(), message, "roomBooking", groupId, "faculty_approved");
 		}
 		
 		return JsonUtil.simpleMessageResponse("Successfully booked.");
@@ -287,14 +285,12 @@ public class RoomBookingController {
 		String status = roomBookingInfo.getStatus();
 		if (status.equals("created")) {
 			// Send push notification to supervisor.
-			String apnToken = pushNotificationService.getAPNToken("faculty", roomBookingInfo.getFacultyid());
 			String message = String.format("学生申请已取消！申请编号: %s。", groupId);
-			pushNotificationService.sendPushNotification(apnToken, message, "roomBooking", groupId, "canceled");
+			pushNotificationService.sendPushNotification("faculty", roomBookingInfo.getFacultyid(), message, "roomBooking", groupId, "canceled");
 		} else {
 			// Send push notification to admin.
-			String apnToken = pushNotificationService.getAPNToken("admin", userService.getDefaultAdminId());
 			String message = String.format("申请已取消！申请编号: %s。", groupId);
-			pushNotificationService.sendPushNotification(apnToken, message, "roomBooking", groupId, "canceled");
+			pushNotificationService.sendPushNotification("admin", userService.getDefaultAdminId(), message, "roomBooking", groupId, "canceled");
 		}
 		
 		return JsonUtil.simpleMessageResponse("Successfully canceled booking.");
@@ -404,9 +400,8 @@ public class RoomBookingController {
 				// Send push notification.
 				String applicantType = roomBookingInfo.getApplicanttype();
 				String applicantId = roomBookingInfo.getApplicantid();
-				String apnToken = pushNotificationService.getAPNToken(applicantType, applicantId);
 				String message = String.format("您的教室申请已通过审核！申请编号: %s。", groupId);
-				pushNotificationService.sendPushNotification(apnToken, message, "roomBooking", groupId, "admin_approved");
+				pushNotificationService.sendPushNotification(applicantType, applicantId, message, "roomBooking", groupId, "admin_approved");
 				
 				return JsonUtil.simpleMessageResponse("Approved.");
 			}
@@ -419,16 +414,14 @@ public class RoomBookingController {
 				// Send push notification to applicant.
 				String applicantType = roomBookingInfo.getApplicanttype();
 				String applicantId = roomBookingInfo.getApplicantid();
-				String apnToken = pushNotificationService.getAPNToken(applicantType, applicantId);
 				String message = String.format("您的教室申请已通过上级审核！申请编号: %s。", groupId);
-				pushNotificationService.sendPushNotification(apnToken, message, "roomBooking", groupId, "faculty_approved");
+				pushNotificationService.sendPushNotification(applicantType, applicantId, message, "roomBooking", groupId, "faculty_approved");
 				
 				// Send push notification to admin.
 				Student student = userService.getStudentById(applicantId);
-				apnToken = pushNotificationService.getAPNToken("admin", userService.getDefaultAdminId());
 				message = String.format("教室申请通知！教室: %s%s, 申请人: %s。", 
 						roomBookingInfo.getRoombuilding(), roomBookingInfo.getRoomnumber(), student.toString());
-				pushNotificationService.sendPushNotification(apnToken, message, "roomBooking", groupId, "faculty_approved");
+				pushNotificationService.sendPushNotification("admin", userService.getDefaultAdminId(), message, "roomBooking", groupId, "faculty_approved");
 				
 				return JsonUtil.simpleMessageResponse("Approved.");
 			}
@@ -464,22 +457,22 @@ public class RoomBookingController {
 		switch (personType) {
 			case "admin": {
 				roomBookingService.adminDecline(groupId, declineReason);
-				
+
 				// Send push notification.
-				String apnToken = pushNotificationService.getAPNToken(roomBookingInfo.getApplicanttype(), roomBookingInfo.getApplicantid());
 				String message = String.format("您的教室申请已被管理员拒绝！申请编号: %s。", groupId);
-				pushNotificationService.sendPushNotification(apnToken, message, "roomBooking", groupId, "admin_declined");
-				
+				pushNotificationService.sendPushNotification(roomBookingInfo.getApplicanttype(),
+						roomBookingInfo.getApplicantid(), message, "roomBooking", groupId, "admin_declined");
+
 				return JsonUtil.simpleMessageResponse("Declined.");
 			}
 			case "faculty": {
 				roomBookingService.supervisorDecline(groupId, declineReason);
-				
+
 				// Send push notification.
-				String apnToken = pushNotificationService.getAPNToken(roomBookingInfo.getApplicanttype(), roomBookingInfo.getApplicantid());
 				String message = String.format("您的教室申请已被上级拒绝！申请编号: %s。", groupId);
-				pushNotificationService.sendPushNotification(apnToken, message, "roomBooking", groupId, "faculty_declined");
-				
+				pushNotificationService.sendPushNotification(roomBookingInfo.getApplicanttype(),
+						roomBookingInfo.getApplicantid(), message, "roomBooking", groupId, "faculty_declined");
+
 				return JsonUtil.simpleMessageResponse("Declined.");
 			}
 			default: {

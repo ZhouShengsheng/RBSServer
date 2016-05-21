@@ -40,6 +40,6 @@ public interface PushNotificationService {
      * @param groupId
      * @param status
      */
-    void sendPushNotification(String apnToken, String message, String type, String groupId, String status) throws Exception;
+    void sendPushNotification(String userType, String userId, String message, String messageType, String groupId, String status) throws Exception;
 	
 }

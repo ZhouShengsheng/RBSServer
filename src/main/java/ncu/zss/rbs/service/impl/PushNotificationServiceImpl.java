@@ -36,18 +36,21 @@ public class PushNotificationServiceImpl implements PushNotificationService {
 	}
 
 	@Override
-	public void sendPushNotification(String apnToken, String message, String type, String groupId, String status) throws Exception {
+	public void sendPushNotification(String userType, String userId, String message, String messageType, String groupId, String status) throws Exception {
 		JSONObject pushData = new JSONObject();
 		JSONObject aps = new JSONObject();
 		aps.put("alert", message);
 		aps.put("sound", "default");
+		aps.put("badge", 1);
+		
 		pushData.put("aps", aps);
-		pushData.put("type", type);
+		pushData.put("type", messageType);
 		pushData.put("groupId", groupId);
 		pushData.put("status", status);
 		
 		JSONObject mqData = new JSONObject();
-		mqData.put("apnToken", apnToken);
+		mqData.put("userType",userType);
+		mqData.put("userId",userId);
 		mqData.put("pushData", pushData);
 		
 		mqService.send("push_notification_exchange", "push.room_booking", mqData.toJSONString());

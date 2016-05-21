@@ -13,6 +13,7 @@ import com.alibaba.fastjson.JSONObject;
 import ncu.zss.rbs.mq.MQService;
 import ncu.zss.rbs.mq.rabbitmq.RabbitMQMessageListener;
 import ncu.zss.rbs.service.APNSService;
+import ncu.zss.rbs.service.PushNotificationService;
 
 public class PushNotificationMessageQueueListener implements InitializingBean, DisposableBean {
 
@@ -25,6 +26,10 @@ public class PushNotificationMessageQueueListener implements InitializingBean, D
 	@Autowired
 	@Qualifier("apnsServiceImpl")
 	APNSService apnsService;
+	
+	@Autowired
+	@Qualifier("pushNotificationServiceImpl")
+	PushNotificationService pushNotificationService;
 
 	/**
 	 * Listener.
@@ -41,7 +46,7 @@ public class PushNotificationMessageQueueListener implements InitializingBean, D
 					String pushDataStr = new String((byte[]) message);
 
 					JSONObject mqData = JSONObject.parseObject(pushDataStr);
-					if (mqData == null || !mqData.containsKey("apnToken") || !mqData.containsKey("pushData")) {
+					if (mqData == null || !mqData.containsKey("pushData") || !mqData.containsKey("userType") || !mqData.containsKey("userId")) {
 						try {
 							// Dirty data, reject.
 							logger.warn("Dirty data, rejected: " + pushDataStr);
@@ -53,10 +58,16 @@ public class PushNotificationMessageQueueListener implements InitializingBean, D
 					}
 
 					// Send push notification.
-					String apnToken = mqData.getString("apnToken");
+					String userType = mqData.getString("userType");
+					String userId = mqData.getString("userId");
+					String apnToken = pushNotificationService.getAPNToken(userType, userId);
 					JSONObject pushData = mqData.getJSONObject("pushData");
 					apnsService.push(apnToken, pushData.toJSONString());
+					
+					// Log.
 					logger.info("New push notification.");
+					logger.info("userType: " + userType);
+					logger.info("userId: " + userId);
 					logger.info("apnToken: " + apnToken);
 					logger.info("pushData: " + pushData.toJSONString());
 
@@ -78,14 +89,9 @@ public class PushNotificationMessageQueueListener implements InitializingBean, D
 			}, "push_notification_queue");
 			logger.info("Binded message listener.");
 		} catch (Exception e) {
-			logger.error("Failed to bind listeners.");
+			logger.error("Failed to bind listener.");
 			logger.error(e.getStackTrace());
 		} finally {
-			try {
-				Thread.sleep(10000);
-			} catch (InterruptedException e) {
-				logger.error(e.getStackTrace());
-			}
 		}
 	}
 
